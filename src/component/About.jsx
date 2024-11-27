@@ -6,7 +6,7 @@ export default function About() {
   return (
     <> 
     <Aboutcontent/>
-    <Testimonial/>
+    <Testimonial/> 
     </>
   )
 }
