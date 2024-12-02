@@ -5,7 +5,7 @@ import Testimonial from './partials/Testimonial'
 export default function About() {
   return (
     <> 
-    <Aboutcontent/>
+    <Aboutcontent />
     <Testimonial/> 
     </>
   )
