@@ -31,7 +31,7 @@ export default function Home() {
       <div id="header-carousel" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-inner">
           <div className="carousel-item active">
-            <img className="w-100" src="img/carousel-1.jpg" style={{height:500}} alt="Image" />
+            <img className="w-100" src="img/b7.jpg" style={{height:500}} alt="Image" />
             <div className="carousel-caption">
               <div className="container">
                 <div className="row justify-content-center">
@@ -51,14 +51,13 @@ export default function Home() {
             </div>
           </div>
           <div className="carousel-item">
-            <img className="w-100" src="img/carousel-2.jpg" style={{height:500}} alt="Image" />
+            <img className="w-100" src="img/b6.jpg" style={{height:500}} alt="Image" />
             <div className="carousel-caption">
               <div className="container">
                 <div className="row justify-content-center">
                   <div className="col-12 col-lg-10">
 <h6 className="text-light text-uppercase mb-3 animated slideInDown" >   Welcome to ecoApp </h6>
-                    <h5 className="display-2 text-light mb-3 animated slideInDown ">
-                    Latest And Branded Product For Women   </h5>
+ <h5 className="display-2 text-light mb-3 animated slideInDown ">Latest And Branded Product For Women   </h5>
                  
                   <ol className="breadcrumb mb-4 pb-2">
                       <li className="breadcrumb-item fs-5 text-light"> Jeans</li>

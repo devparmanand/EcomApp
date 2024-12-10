@@ -15,7 +15,7 @@ export default function Aboutcontent() {
             >
               <img
                 className="position-absolute w-100 h-100"
-                src="img/h.jpg"
+                src="img/b5.jpg"
                 alt=""
                 style={{objectFit:"cover"}}
               />
@@ -85,7 +85,7 @@ export default function Aboutcontent() {
       <div className="row g-0">
         <div className="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.1s">
           <div className="position-relative">
-            <img className="img-fluid w-100" src="img/p.jpeg" style={{height:350,width:"100%"}} alt="" />
+            <img className="img-fluid w-100" src="img/p1.jpg" style={{height:350,width:"100%"}} alt="" />
             <div className="facts-overlay">
               <h1 className="display-1">01</h1>
               <h4 className="text-white mb-3">Top Brands</h4>
@@ -98,7 +98,7 @@ export default function Aboutcontent() {
         </div>
         <div className="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.3s">
           <div className="position-relative">
-          <img className="img-fluid w-100" src="img/p2.jpeg" style={{height:350,width:"100%"}} alt="" />
+          <img className="img-fluid w-100" src="img/p3.jpg" style={{height:350,width:"100%"}} alt="" />
             <div className="facts-overlay">
               <h1 className="display-1">02</h1>
               <h4 className="text-white mb-3">Latest Fashion</h4>
@@ -112,7 +112,7 @@ export default function Aboutcontent() {
         </div>
         <div className="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.5s">
           <div className="position-relative">
-          <img className="img-fluid w-100" src="img/p3.jpeg" style={{height:350,width:"100%"}} alt="" />
+          <img className="img-fluid w-100" src="img/p5.jpg" style={{height:350,width:"100%"}} alt="" />
             <div className="facts-overlay">
               <h1 className="display-1">03</h1>
               <h4 className="text-white mb-3">Fast Delivery</h4>
@@ -126,7 +126,7 @@ export default function Aboutcontent() {
         </div>
         <div className="col-xl-3 col-sm-6 wow fadeIn" data-wow-delay="0.7s">
           <div className="position-relative">
-          <img className="img-fluid w-100" src="img/p4.jpeg" style={{height:350,width:"100%"}} alt="" />
+          <img className="img-fluid w-100" src="img/cp1.jpg" style={{height:350,width:"100%"}} alt="" />
             <div className="facts-overlay">
               <h1 className="display-1">04</h1>
               <h4 className="text-white mb-3">7 Days</h4>
@@ -146,3 +146,4 @@ export default function Aboutcontent() {
     </>
   )
 }
+
