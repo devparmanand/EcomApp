@@ -6,7 +6,7 @@ import { getSubcategory,updateSubcategory, } from "../../../Store/ActionCreators
 import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminUpdateSubcategory() {
-  let {id}=useParams()
+let {_id} = useParams
   // let[Subcategory,setSubcategory]=useState([])
 
   let [data, setData] = useState({
@@ -14,7 +14,9 @@ export default function AdminUpdateSubcategory() {
     active: true,
   });
 
-  let [errorMessage, setErrorMessage] = useState("");
+  let [errorMessage, setErrorMessage] = useState({
+    name:""
+  });
   let [show, setShow] = useState(false);
 
   let navigate = useNavigate();
@@ -40,13 +42,15 @@ export default function AdminUpdateSubcategory() {
     else {
       
       let item = SubcategoryStateData.find((x)=> x.name.toLowerCase() === data.name.toLowerCase());
-      if (item && item.id!==id) {
+      if (item && item._id!==_id) {
         setShow(true);
         setErrorMessage("Subcategory Name is Already Exist");
       } 
       else {
   
       dispatch(updateSubcategory({...data}))
+      console.log(SubcategoryStateData);
+      
         navigate("/admin/subcategory")
       }
 
@@ -58,7 +62,7 @@ export default function AdminUpdateSubcategory() {
      
       dispatch(getSubcategory())
       if(SubcategoryStateData.length){
-        let item =SubcategoryStateData.find((x)=>x.id===id)
+        let item =SubcategoryStateData.find((x)=>x._id===_id)
         if(item){
          setData({...item})
       

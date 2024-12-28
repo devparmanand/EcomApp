@@ -84,7 +84,7 @@ export default function Formvalidators(e) {
 
       case "message":
         if (!value || value.length === 0) return name + " is Mandatory";
-        else if (value.length < 50)
+        else if (value < 0 || value > 100)
           return name + " Please Enter Atleast 50 Characters";
         else
          return "";

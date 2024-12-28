@@ -1,25 +1,25 @@
 import { put,takeEvery } from "redux-saga/effects";
 import {CREATE_PRODUCT, CREATE_PRODUCT_RED, DELETE_PRODUCT, DELETE_PRODUCT_RED, GET_PRODUCT, GET_PRODUCT_RED, UPDATE_PRODUCT, UPDATE_PRODUCT_QUANTITY, UPDATE_PRODUCT_QUANTITY_RED, UPDATE_PRODUCT_RED} from "../../Constant"
-import {createRecord, deleteRecord, getRecord, updateRecord} from "./services"
+import {createRecordFormData, deleteRecord, getRecord,updateRecordFormData} from "./services"
 
 
 function* createSaga(action){
-let response=yield createRecord("product",action.payload)
-yield put({type:CREATE_PRODUCT_RED,payload:response})
+let response=yield createRecordFormData("product",action.payload)
+yield put({type:CREATE_PRODUCT_RED,payload:response.data})
 }
 
 function* getSaga(){
   let response=yield getRecord("product")
-  yield put({type:GET_PRODUCT_RED,payload:response})
+  yield put({type:GET_PRODUCT_RED,payload:response.data})
   }
 
   function* updateSaga(action){
-    yield updateRecord("product",action.payload)
-    yield put({type:UPDATE_PRODUCT_RED,payload:action.payload})
+   let response =  yield updateRecordFormData("product",action.payload)
+    yield put({type:UPDATE_PRODUCT_RED,payload:response.data})
     }
 
     function* updateQuantitySaga(action){
-      yield updateRecord("product",action.payload)
+      yield updateRecordFormData("product",action.payload)
       yield put({type:UPDATE_PRODUCT_QUANTITY_RED,payload:action.payload})
       }  
     

@@ -39,23 +39,25 @@ export default function Login() {
             e.preventDefault()
           let error=Object.values(errorMessage).find((x)=>x!=="")
           if(!error){
-              let resposne = await fetch("/user",{
-                method:"GET",
+              let resposne = await fetch("/api/user/login",{
+                method:"POST",
                 headers:{
                     "content-type":"application/json"
-               }
+               },
+               body:JSON.stringify(data)
             })
             resposne=await resposne.json()
-             let item = resposne.find((x)=>x.username===data.username && x.password===data.password)
-            if(item){
+
+            if(resposne.result === "Done"){
              localStorage.setItem("login",true)
-             localStorage.setItem("name",item.name)
-             localStorage.setItem("userid",item.id)
-             localStorage.setItem("role",item.role)
-             if(item.role==="Admin")
-                navigate("/admin")
+             localStorage.setItem("name",resposne.data.name)
+             localStorage.setItem("userid",resposne.data._id)
+             localStorage.setItem("role",resposne.data.role)
+             localStorage.setItem("token",resposne.token)
+             if(resposne.data.role==="Buyer")
+                navigate("/profile")
             else
-            navigate("/profile")
+            navigate("/admin")
             }
          else{
           setShow(true)

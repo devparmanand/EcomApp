@@ -8,11 +8,13 @@ import { createProduct } from "../../../Store/ActionCreators/ProductActionCreato
 import { getMaincategory } from "../../../Store/ActionCreators/MaincategoryActionCreators";
 import { getSubcategory } from "../../../Store/ActionCreators/SubcategoryActionCreators";
 import { getBrand } from "../../../Store/ActionCreators/BrandActionCreators";
-
 import { useDispatch, useSelector } from "react-redux";
 let rte;
 
 export default function AdminCreateProduct() {
+  let [maincategory , setMaincategory] = useState([])
+  let [subcategory , setSubcategory] = useState([])
+  let [brand , setBrand] = useState([])
   let refdiv = useRef(null)
   let [data, setData] = useState({
     name: "",
@@ -25,7 +27,7 @@ export default function AdminCreateProduct() {
     discount: 0,
     finalPrice: 0,
     stock: true,
-    quantity: 0,
+    stockQuantity: 0,
     description: "",
     pic: "",
     active: true,
@@ -37,23 +39,22 @@ export default function AdminCreateProduct() {
     size: "Size Field is Mandatory",
     basePrice: "Base Price Field is Mandatory",
     discount: "Discount Field is Mandatory",
-    quantity: "Quantity Field is Mandatory",
-    pic: "Pic Field is Mandatory",
+    stockQuantity: "Stock stockQuantity Field is Mandatory",
+    pic: ["Pic Field is Mandatory"],
   });
   let [show, setShow] = useState(false);
 
   let navigate = useNavigate();
   let dispatch = useDispatch();
 
-  let MaincategoryStateData = useSelector(
-    (state) => state.MaincategoryStateData
-  );
+  let MaincategoryStateData = useSelector( (state) => state.MaincategoryStateData);
   let SubcategoryStateData = useSelector((state) => state.SubcategoryStateData);
   let BrandStateData = useSelector((state) => state.BrandStateData);
   function getInputData(e) {
     // console.log(e.target.files);
     let name = e.target.name;
-    let value = e.target.files ? Array.from(e.target?.files).map((item)=> "/products/" + item.name): e.target.value;
+    // let value = e.target.files ? Array.from(e.target?.files).map((item)=> "/products/" + item.name): e.target.value;
+    let value = e.target.files ? e.target?.files: e.target.value;
     if (name !=="active") {
       setErrorMessage((old) => {
         return {
@@ -71,25 +72,51 @@ export default function AdminCreateProduct() {
     });
   }
   function postData(e) {
-  console.log(errorMessage);
     e.preventDefault();
     let error = Object.values(errorMessage).find((x) => x.length > 0);
+
     if (error) setShow(true);
     else {
-      dispatch(createProduct({
-         ...data,
-        maincategory:data.maincategory || MaincategoryStateData[0].name,
-        subcategory:data.subcategory || SubcategoryStateData[0].name,
-        brand:data.brand || BrandStateData[0].name,
-        basePrice:parseInt(data.basePrice),
-        discount:parseInt(data.discount),
-        finalPrice:parseInt(data.basePrice-data.basePrice*data.discount/100),
-        quantity:parseInt(data.quantity),
-        description:rte.getHTMLCode()
-        }));
+      // dispatch(createProduct({
+      //    ...data,
+      //   maincategory:data.maincategory || MaincategoryStateData[0].name,
+      //   subcategory:data.subcategory || SubcategoryStateData[0].name,
+      //   brand:data.brand || BrandStateData[0].name,
+      //   basePrice:
+      //   discount:parseInt(data.discount),
+      //   finalPrice:parseInt(data.basePrice-data.basePrice*data.discount/100),
+      //   quantity:parseInt(data.quantity),
+      //   description:rte.getHTMLCode()
+      //   }));
+        let basePrice = parseInt(data.basePrice)
+        let discount = parseInt(data.discount)
+        let finalPrice = parseInt(data.basePrice-data.basePrice*data.discount/100)
+
+        let formData = new FormData()
+
+        formData.append("name" , data.name)
+        formData.append("maincategory" , data.maincategory === "" ? maincategory[0]._id : data.maincategory)
+        formData.append("subcategory" , data.subcategory === "" ? subcategory[0]._id : data.subcategory)
+        formData.append("brand" , data.brand === "" ? brand[0]._id : data.brand)
+        formData.append("basePrice" , basePrice)
+        formData.append("discount" , discount)
+        formData.append("finalPrice" ,finalPrice)
+        formData.append("stock" , data.stock)
+        formData.append("size" , data.size)
+        formData.append("color" , data.color)
+        formData.append("stockQuantity" , data.stockQuantity)
+        formData.append("description" , rte.getHTMLCode())
+        Array.from(data.pic).forEach((p)=>{
+              formData.append("pic" , p)
+        })
+        formData.append("active" , data.active) 
+
+        dispatch(createProduct(formData))
       navigate("/admin/product");
+
+
     }
-  }
+  } 
 
   useEffect(() =>{
     rte = new window.RichTextEditor(refdiv.current);
@@ -101,19 +128,27 @@ export default function AdminCreateProduct() {
 
   useEffect(() => {
     (() => {
-      dispatch(getMaincategory());
+      dispatch(getMaincategory())
+      if(MaincategoryStateData.length)
+        setMaincategory(MaincategoryStateData.filter((x)=>x.active === true))
+      
     })();
   }, [MaincategoryStateData.length]);
 
   useEffect(() => {
     (() => {
-      dispatch(getSubcategory());
+      dispatch(getSubcategory())
+      if(SubcategoryStateData.length)
+        setSubcategory(SubcategoryStateData.filter((x)=>x.active === true))
     })();
   }, [SubcategoryStateData.length]);
 
   useEffect(() => {
     (() => {
-      dispatch(getBrand());
+      dispatch(getBrand())
+      if(BrandStateData.length)
+        setBrand(BrandStateData.filter((x)=>x.active === true))
+      
     })();
   }, [BrandStateData.length]);
   return (
@@ -126,7 +161,7 @@ export default function AdminCreateProduct() {
 
           <div className="col-md-9">
             <h5 className="bg-primary p-2 text-center text-light">
-              Product
+          Admin Create  Product
               <Link to="/admin/product">
                 <i className="fa fa-backward text-light float-end"></i>
               </Link>
@@ -161,12 +196,9 @@ export default function AdminCreateProduct() {
                     onChange={getInputData}
                     className="form-select border-primary border-2"
                   >
-                    {MaincategoryStateData.map((item, index) => {
-                      return (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
+                    {
+                maincategory.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
                     })}
                   </select>
                 </div>
@@ -178,31 +210,39 @@ export default function AdminCreateProduct() {
                     onChange={getInputData}
                     className="form-select border-primary border-2"
                   >
-                    {SubcategoryStateData.map((item, index) => {
-                      return (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
+                    {
+                    // subcategory.map((item, index) => {
+                    //   return (
+                    //     <option key={index} value={item.name}>
+                    //       {item.name}
+                    //     </option>
+                    //   );
+                  subcategory.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
+                      
                     })}
                   </select>
                 </div>
                 <div className="col-md-3 col-sm-6 mb-3">
-                  <label>Brand*</label>
+                  <label>Brand</label>
                   <select
-                    name="Brand"
+                    name="brand"
                     onChange={getInputData}
                     className="form-select border-primary border-2"
                   >
-                    {BrandStateData.map((item, index) => {
-                      return (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
+                    {
+                    // subcategory.map((item, index) => {
+                    //   return (
+                    //     <option key={index} value={item.name}>
+                    //       {item.name}
+                    //     </option>
+                    //   );
+                    brand.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
                     })}
                   </select>
                 </div>
+
                 <div className="col-md-3 col-sm-6 mb-3">
                   <label>Stock*</label>
                   <select
@@ -320,7 +360,7 @@ export default function AdminCreateProduct() {
                   <label>Stock Quantity*</label>
                   <input
                     type="number"
-                    name="quantity"
+                    name="stockQuantity"
                     onChange={getInputData}
                     placeholder="Stock Quantity"
                     className="form-control border-primary border-2"

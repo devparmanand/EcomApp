@@ -27,7 +27,7 @@ export default function Products(props) {
         props.data && props.data.map((item,index)=>{
           return <div key={index} className="col-lg-3 col-md-4 col-sm-2 wow fadeInUp" data-wow-delay="0.1s">
             <div className="service-item bg-light overflow-hidden h-100">
-              <img className="img-fluid" src={item.pic[0]} style={{height:250,width:"100%"}} alt="" />
+              <img className="img-fluid" src={`/${item.pic[0]}`} style={{height:250,width:"100%"}} alt="" />
               <div className="service-text position-relative text-center h-100 p-4">
                 <h5 className="mb-3 fs-5" style={{height:50}}>{item.name}</h5>
                 <p>
@@ -40,7 +40,7 @@ export default function Products(props) {
                 <p>{item.quantity} In Stock
 
                 </p>
-<Link to={`/product/${item.id}`} className='btn btn-success text-light w-100'>Add to Cart</Link>  
+<Link to={`/product/${item._id}`} className='btn btn-success text-light w-100'>Add to Cart</Link>  
               
               </div>
             </div>

@@ -8,17 +8,17 @@ export default function AdminHome(props) {
   let navigate =useNavigate()
   useEffect(()=>{
       (async()=>{
-let response = await fetch("/user",{
+let response = await fetch("/api/user/"+localStorage.getItem("userid"),{
   method:"get",
   headers:{
-      "content-type":"application/json"
+      "content-type":"application/json",
+      "authorization":localStorage.getItem("token")
   }
 
 })
 response=await response.json()
-let item= response.find((x)=>x.id===localStorage.getItem("userid"))
-if(item)
-  setUser(item)
+if(response.result==="Done")
+  setUser(response.data)
 else
 navigate("/login")
       })()

@@ -1,21 +1,27 @@
 import { put,takeEvery } from "redux-saga/effects";
 import {CREATE_TESTIMONIAL, CREATE_TESTIMONIAL_RED, DELETE_TESTIMONIAL, DELETE_TESTIMONIAL_RED, GET_TESTIMONIAL, GET_TESTIMONIAL_RED, UPDATE_TESTIMONIAL, UPDATE_TESTIMONIAL_RED} from "../../Constant"
-import {createRecord, deleteRecord, getRecord, updateRecord} from "./services"
+import { createRecordFormData, deleteRecord, getRecord, updateRecordFormData } from "./services";
+// import {createRecord, deleteRecord, getRecord, updateRecord} from "./services"
+
 
 
 function* createSaga(action){
-let response= yield createRecord("testimonial",action.payload)
-yield put({type:CREATE_TESTIMONIAL_RED,payload:response})
+// let response= yield createRecord("testimonial",action.payload)
+// yield put({type:CREATE_TESTIMONIAL_RED,payload:response})
+let response= yield createRecordFormData("testimonial",action.payload)
+yield put({type:CREATE_TESTIMONIAL_RED,payload:response.data})
 }
 
 function* getSaga(){
   let response= yield getRecord("testimonial")
-  yield put({type:GET_TESTIMONIAL_RED,payload:response})
+  yield put({type:GET_TESTIMONIAL_RED,payload:response.data})
   }
 
   function* updateSaga(action){
-    yield updateRecord("testimonial",action.payload)
-    yield put({type:UPDATE_TESTIMONIAL_RED,payload:action.payload})
+    // yield updateRecord("testimonial",action.payload)
+    // yield put({type:UPDATE_TESTIMONIAL_RED,payload:action.payload})
+  let response=  yield updateRecordFormData("testimonial",action.payload)
+    yield put({type:UPDATE_TESTIMONIAL_RED,payload:response.data})
     }
     
     function* deleteSaga(action){

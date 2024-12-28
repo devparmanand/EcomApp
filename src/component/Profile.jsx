@@ -17,17 +17,18 @@ export default function Profile() {
     let CheckoutStateData=useSelector((state)=>state.CheckoutStateData)
     useEffect(()=>{
         (async()=>{
-let response = await fetch("/user",{
-    method:"get",
+let response = await fetch("/api/user",{
+    method:"GET",
     headers:{
-        "content-type":"application/json"
+        "content-type":"application/json",
+        "authorization":localStorage.getItem("token")
     }
 
 })
 response=await response.json()
-let item= response.find((x)=>x.id===localStorage.getItem("userid"))
-if(item)
-    setUser(item)
+
+if(response.result === "Done")
+    setUser(response.data)
 else
 navigate("/login")
         })()
@@ -63,6 +64,7 @@ useEffect(()=>{
 },[CheckoutStateData.length])
   return (
     <>
+
     <div className="container-fluid">
         <div className="row">
             <div className="col-md-6">

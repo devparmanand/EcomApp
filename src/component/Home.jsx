@@ -21,6 +21,8 @@ export default function Home() {
  useEffect(()=>{
   (()=>{
     dispatch(getProduct())
+    console.log(ProductStateData);
+    
   })()
  },[ProductStateData.length])
  
@@ -100,7 +102,7 @@ export default function Home() {
      {
       MaincategoryStateData.length && ProductStateData.length  && MaincategoryStateData.map((item,index)=>{
  
-  return  <Product key={index} data={ProductStateData.filter((x)=>x.maincategory===item.name).slice(0,36)} title={item.name}/>
+  return  <Product key={index} title={`${item.name} Products`} data={ProductStateData.filter((x)=>x.maincategory._id===item._id).slice(0,36)}/>
       })
      }
 

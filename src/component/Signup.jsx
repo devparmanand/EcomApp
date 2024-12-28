@@ -40,63 +40,64 @@ export default function Signup() {
   }
 
   async function postData(e) {
-    e.preventDefault();
+    e.preventDefault();   
     if (data.password === data.cpassword) {
       let error = Object.values(errorMessage).find((x) => x !== "");
-      if (!error) {
-        let resposne = await fetch("/user", {
-          method: "GET",
+      if (error) 
+        setShow(true)
+      else{
+        let   item = {
+          name: data.name,
+          username: data.username,
+          email: data.email,
+          phone: data.phone,
+          password: data.password,
+          role: "Buyer",
+        }
+
+        let   resposne = await fetch("/api/user", {
+          method: "POST",
           headers: {
             "content-type": "application/json",
           },
+          body: JSON.stringify(item),
         });
         resposne = await resposne.json();
-        let item = resposne.find(
-          (x) => x.username === data.username || x.email === data.email
-        );
-        if (item) {
-          setShow(true);
-          setErrorMessage((old) => {
-            return {
-              ...old,
-              username:
-                item.username === data.username ? "Username Already Taken" : "",
-              email:
-                item.email === data.email ? "Email Address Already Taken" : "",
-            };
-          });
-        } else {
-          item = {
-            name: data.name,
-            username: data.username,
-            email: data.email,
-            phone: data.phone,
-            password: data.password,
-            role: "Buyer",
-          };
-          resposne = await fetch("/user", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(item),
-          });
-          resposne = await resposne.json();
-          if (resposne) navigate("/login");
-          else alert("Something Went Wrong");
+        if (resposne.result==="Done"){
+          localStorage.setItem("login", true)
+          localStorage.setItem("name", resposne.data.name)
+          localStorage.setItem("userid", resposne.data._id)
+          localStorage.setItem("role", resposne.data.role)
+          localStorage.setItem("token", resposne.token)
+          navigate("/profile");
         }
-      } else setShow(true);
-    } else {
+          else{
+            console.log(resposne);
+                  setShow(true)
+                 setErrorMessage((old)=>{
+                  return{
+                    ...old,
+                    "username":resposne.reason?.username ?? "",
+                    "email":resposne.reason?.email ?? "",
+                    "password":resposne.reason?.password ?? "",
+                  }
+                 })
+          }
+      }
+       
+      
+       
+    } else {  
+      setShow(true)
       setErrorMessage((old) => {
         return {
           ...old,
-          ["password"]: "Password and Confirm Password Doesn't Matched",
-        };
-      });
-      setShow(true);
+          'password': "Password and Confirm Password Doesn't Matched",
+        }
+      })
     }
-  }
-
+  
+}
   return (
     <>
       <div className="container-fluid my-3">

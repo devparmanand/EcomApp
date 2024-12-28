@@ -5,17 +5,17 @@ import {createRecord, deleteRecord, getRecord, updateRecord} from "./services"
 
 function* createSaga(action){
 let response= yield createRecord("maincategory",action.payload)
-yield put({type:CREATE_MAINCATEGORY_RED,payload:response})
+yield put({type:CREATE_MAINCATEGORY_RED,payload:response.data})
 }
 
 function* getSaga(){
   let response= yield getRecord("maincategory")
-  yield put({type:GET_MAINCATEGORY_RED,payload:response})
+  yield put({type:GET_MAINCATEGORY_RED,payload:response.data})
   }
 
   function* updateSaga(action){
-    yield updateRecord("maincategory",action.payload)
-    yield put({type:UPDATE_MAINCATEGORY_RED,payload:action.payload})
+    let response= yield updateRecord("maincategory",action.payload)
+    yield put({type:UPDATE_MAINCATEGORY_RED,payload:response.data})
     }
     
     function* deleteSaga(action){

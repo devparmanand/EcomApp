@@ -30,7 +30,6 @@ import Product from "./Product";
 import Checkout from "./Checkout";
 import Confirmation from "./Confirmation";
 import AdminNewsletter from "./admin/Newsletter/AdminNewsletter";
-import AdminUser from "./admin/User/AdminUser";
 import AdminCheckout from "./admin/Checkout/AdminCheckout";
 import AdminContact from "./admin/Contact/AdminContact";
 import Testimonial from "./partials/Testimonial";
@@ -39,6 +38,7 @@ import Testimonial from "./partials/Testimonial";
 import AdminTestimonial from "./admin/Testimonial/AdminTestimonial";
 import AdminCreateTestimonial from "./admin/Testimonial/AdminCreateTestimonial";
 import AdminUpdateTestimonial from "./admin/Testimonial/AdminUpdateTestimonial ";
+import AdminUsers from "./admin/AdminUsers/AdminUsers";
 
 
 export default function App() {
@@ -54,7 +54,7 @@ export default function App() {
         <Route path="/shop" element={<Shop/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/login" element={<Login/>} />
-        <Route path="/product/:id" element={<Product/>}/>
+        <Route path="/product/:_id" element={<Product/>}/>
      
 
    
@@ -70,28 +70,28 @@ export default function App() {
 
 <Route path="/admin/maincategory" element={<AdminMaincategory/>} />
 <Route path="/admin/maincategory/create" element={<AdminCreateMaincategory/>} />
-<Route path="/admin/maincategory/update/:id" element={<AdminUpdateMaincategory/>} />
+<Route path="/admin/maincategory/update/:_id" element={<AdminUpdateMaincategory/>} />
 
 <Route path="/admin/subcategory" element={<AdminSubcategory/>} />
 <Route path="/admin/subcategory/create" element={<AdminCreateSubcategory/>} />
-<Route path="/admin/subcategory/update/:id" element={<AdminUpdateSubcategory/>} />
+<Route path="/admin/subcategory/update/:_id" element={<AdminUpdateSubcategory/>} />
 
 <Route path="/admin/brand" element={<AdminBrand/>} />
 <Route path="/admin/brand/create" element={<AdminCreateBrand/>} />
-<Route path="/admin/brand/update/:id" element={<AdminUpdateBrand/>} />
+<Route path="/admin/brand/update/:_id" element={<AdminUpdateBrand/>} />
 {/* Testimonial */}
 
 <Route path="/admin/testimonial" element={<AdminTestimonial/>} />
 <Route path="/admin/testimonial/create" element={<AdminCreateTestimonial/>} />
-<Route path="/admin/testimonial/update/:id" element={<AdminUpdateTestimonial/>} />
+<Route path="/admin/testimonial/update/:_id" element={<AdminUpdateTestimonial/>} />
 
 <Route path="/admin/testimonial" element={<Testimonial/>} />
 
 <Route path="/admin/product" element={<AdminProduct/>} />
 <Route path="/admin/product/create" element={<AdminCreateProduct/>} />
-<Route path="/admin/product/update/:id" element={<AdminUpdateProduct/>} />
+<Route path="/admin/product/update/:_id" element={<AdminUpdateProduct/>} />
 <Route path="/admin/newsletter" element={<AdminNewsletter/>} />
-<Route path="/admin/user" element={<AdminUser/>} />
+<Route path="/admin/user" element={<AdminUsers/>} />
 <Route path="/admin/checkout" element={<AdminCheckout/>} />
 <Route path="/admin/contact" element={<AdminContact/>} />
 

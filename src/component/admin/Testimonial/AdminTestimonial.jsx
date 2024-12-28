@@ -9,11 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 export default function AdminTestimonial() {
   let [data, setData] = useState([])
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
+    { field: "_id", headerName: "ID", width: 250 },
     { field: "name", headerName: "Name", width: 200 },
  { field: "pic", headerName: "Pic", width: 200 ,
- renderCell:({row})=> <a href={`${row.pic}`} target='_blank' rel="noreferrer" >
-      <img src={`${row.pic}`} height={50} width={50} className="rounded" alt="" />
+ renderCell:({row})=> <a href={`/${row.pic}`} target='_blank' rel="noreferrer" >
+      <img src={`/${row.pic}`} height={50} width={50} className="rounded" alt="" />
     </a>},
  
  { field: "message", headerName: "Message", width: 300 },
@@ -34,7 +34,7 @@ export default function AdminTestimonial() {
       width: 70,
       renderCell: ({row}) => 
         <Link
-          to={`/admin/testimonial/update/${row.id} `}
+          to={`/admin/testimonial/update/${row._id} `}
           className="btn btn-primary"
         >
           <i className="fa fa-edit"></i>
@@ -46,7 +46,7 @@ export default function AdminTestimonial() {
       headerName: "Delete",
       width: 100,
       renderCell: ({row}) => 
-        <button className="btn btn-danger" onClick={() => deleteData(row.id)}>
+        <button className="btn btn-danger" onClick={() => deleteData(row._id)}>
           <i className="fa fa-trash"></i>
         </button>
       
@@ -56,13 +56,13 @@ export default function AdminTestimonial() {
     let dispatch = useDispatch();
 
 
-   function deleteData(id) {
+   function deleteData(_id) {
     if (window.confirm("Are You Sure to Delete that Item: ")) {
      
       dispatch(getTestimonial())
       if (TestimonialStateData.length)
         setData(TestimonialStateData);
-      dispatch(deleteTestimonial({ id: id }));
+      dispatch(deleteTestimonial({ _id: _id }));
     
   
       getAPIData();
@@ -102,6 +102,7 @@ export default function AdminTestimonial() {
                 <DataGrid
                   rows={data}
                   columns={columns}
+                  getRowId={(row)=>row._id}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 5 },

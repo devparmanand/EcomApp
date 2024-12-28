@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 export default function AdminBrand() {
   let [data, setData] = useState([])
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "pic", headerName: "Pic", width: 200 ,renderCell:({row})=> <a href={`${row.pic}`} target='_blank' >
-      <img src={`${row.pic}`} height={50} width={50} className="rounded" alt="" />
+    { field: "_id", headerName: "ID", width: 250 },
+    { field: "pic", headerName: "Pic", width: 200 ,renderCell:({row})=> <a href={`http://localhost:8000/${row.pic}`} target='_blank' rel="noreferrer">
+      <img src={`/${row.pic
+      }`} height={50} width={50} className="rounded" alt="" />
     </a>},
     { field: "name", headerName: "Name", width: 200 },
     {
@@ -30,9 +31,9 @@ export default function AdminBrand() {
       field: "edit",
       headerName: "Edit",
       width: 100,
-      renderCell: (row) => (
+      renderCell: ({row}) => (
         <Link
-          to={`/admin/brand/update/${row.id} `}
+          to={`/admin/brand/update/${row._id} `}
           className="btn btn-primary"
         >
           <i className="fa fa-edit"></i>
@@ -43,8 +44,8 @@ export default function AdminBrand() {
       field: "delete",
       headerName: "Delete",
       width: 100,
-      renderCell: (row) => (
-        <button className="btn btn-danger" onClick={() => deleteData(row.id)}>
+      renderCell: ({row}) => (
+        <button className="btn btn-danger" onClick={() => deleteData(row._id)}>
           <i className="fa fa-trash"></i>
         </button>
       ),
@@ -55,7 +56,7 @@ export default function AdminBrand() {
 
   //data get karne ke liye
 
-   function deleteData(id) {
+   function deleteData(_id) {
     if (window.confirm("Are You Sure to Delete that Item: ")) {
       // let response=await fetch("http://localhost:8000/brand/"+id,{
       //   method:"DELETE",
@@ -69,7 +70,7 @@ export default function AdminBrand() {
       if (BrandStateData.length)
         setData(BrandStateData);
       // setData(response)
-      dispatch(deleteBrand({ id: id }));
+      dispatch(deleteBrand({ _id: _id }));
     
   
       getAPIData();
@@ -119,6 +120,7 @@ export default function AdminBrand() {
                 <DataGrid
                   rows={data}
                   columns={columns}
+                  getRowId={(row)=>row._id}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 5 },
@@ -135,3 +137,63 @@ export default function AdminBrand() {
     </>
   );
 }
+
+
+
+
+{/* <table className="table table-bordered">
+<thead>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>MainCategory </th>
+    <th>SubCategory</th>
+    <th>Brand</th>
+    <th>Color</th>
+    <th>Size</th>
+    <th>BasePrice</th>
+    <th>FinalPrice</th>◘
+    <th>Discount</th>
+    <th>Stock Quantity</th>
+    <th>Pic</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+</thead>
+<tbody>
+  {
+    data.map((item, index)=>{
+      return(
+        <tr key={index}>
+          <td>{item._id}</td>
+          <td>{item.name}</td>
+          <td>{item.maincategory.name}</td>
+          <td>{item.subcategory.name}</td>
+          <td>{item.brand.name}</td>
+          <td>{item.color}</td>
+          <td>{item.size}</td>
+          <td>{item.basePrice}</td>
+          <td>{item.finalPrice}</td>
+          <td>{item.discount}</td>
+          <td>{item.stockQuantity}</td>
+          <td>
+            <img src={`/${item.pic}`} alt="" width={"50px"} height={"50px"} srcset="" />
+          </td>
+          <td>  <Link
+                    to={`/admin/brand/update/${item._id} `}
+                    className="btn btn-primary"
+                  >
+                    <i className="fa fa-edit"></i>
+                  </Link></td>
+
+             <td>
+             <button className="btn btn-danger" onClick={() => deleteData(item._id)}>
+             <i className="fa fa-trash"></i>
+              </button>
+             </td>
+        </tr>
+      )
+    })
+  }
+</tbody>
+</table> */}

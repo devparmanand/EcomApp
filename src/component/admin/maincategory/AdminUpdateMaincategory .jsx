@@ -6,7 +6,7 @@ import { getMaincategory,updateMaincategory, } from "../../../Store/ActionCreato
 import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminUpdateMaincategory() {
-  let {id}=useParams()
+  let {_id}=useParams()
   // let[maincategory,setMaincategory]=useState([])
 
   let [data, setData] = useState({
@@ -40,7 +40,7 @@ export default function AdminUpdateMaincategory() {
     else {
       
       let item = MaincategoryStateData.find((x)=> x.name.toLowerCase() === data.name.toLowerCase());
-      if (item && item.id!==id) {
+      if (item && item._id!==_id) {
         setShow(true);
         setErrorMessage("Maincategory Name is Already Exist");
       } 
@@ -58,7 +58,7 @@ export default function AdminUpdateMaincategory() {
      
       dispatch(getMaincategory())
       if(MaincategoryStateData.length){
-        let item =MaincategoryStateData.find((x)=>x.id===id)
+        let item =MaincategoryStateData.find((x)=>x._id===_id)
         if(item){
          setData({...item})
       

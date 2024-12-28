@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import Sidebar from "../Sidebar";
 
 import {getMaincategory,deleteMaincategory} from "../../../Store/ActionCreators/MaincategoryActionCreators"
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 export default function AdminMaincategory() {
   let [data, setData] = useState([])
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
+    { field: "_id", headerName: "ID", width: 250 },
     { field: "name", headerName: "Name", width: 200 },
     {
       field: "active",
@@ -27,9 +27,9 @@ export default function AdminMaincategory() {
       field: "edit",
       headerName: "Edit",
       width: 100,
-      renderCell: (row) => (
+      renderCell: ({row}) => (
         <Link
-          to={`/admin/maincategory/update/${row.id} `}
+          to={`/admin/maincategory/update/${row._id} `}
           className="btn btn-primary"
         >
           <i className="fa fa-edit"></i>
@@ -40,8 +40,8 @@ export default function AdminMaincategory() {
       field: "delete",
       headerName: "Delete",
       width: 100,
-      renderCell: (row) => (
-        <button className="btn btn-danger" onClick={() => deleteData(row.id)}>
+      renderCell: ({row}) => (
+        <button className="btn btn-danger" onClick={() => deleteData(row._id)}>
           <i className="fa fa-trash"></i>
         </button>
       ),
@@ -52,7 +52,7 @@ export default function AdminMaincategory() {
 
   //data get karne ke liye
 
-   function deleteData(id) {
+   function deleteData(_id) {
     if (window.confirm("Are You Sure to Delete that Item: ")) {
       // let response=await fetch("http://localhost:8000/maincategory/"+id,{
       //   method:"DELETE",
@@ -66,7 +66,7 @@ export default function AdminMaincategory() {
       if (MaincategoryStateData.length)
         setData(MaincategoryStateData);
       // setData(response)
-      dispatch(deleteMaincategory({ id: id }));
+      dispatch(deleteMaincategory({ _id: _id }));
     
   
       getAPIData();
@@ -116,6 +116,7 @@ export default function AdminMaincategory() {
                 <DataGrid
                   rows={data}
                   columns={columns}
+                  getRowId={(row)=>row._id}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 5 },

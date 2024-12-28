@@ -3,19 +3,22 @@ import Sidebar from "../Sidebar";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Formvalidators from "../../validators/Formvalidators";
 import Imagevalidators from "../../validators/Imagevalidators";
-
-import { getProduct,updateProduct } from "../../../Store/ActionCreators/ProductActionCreators";
+import { getProduct } from "../../../Store/ActionCreators/ProductActionCreators";
 import { getMaincategory } from "../../../Store/ActionCreators/MaincategoryActionCreators";
 import { getSubcategory } from "../../../Store/ActionCreators/SubcategoryActionCreators";
 import { getBrand } from "../../../Store/ActionCreators/BrandActionCreators";
-
+import { updateProduct } from "../../../Store/ActionCreators/ProductActionCreators";
 import { useDispatch, useSelector } from "react-redux";
 let rte;
 
 export default function AdminUpdateProduct() {
+  let [maincategory , setMaincategory] = useState([])
+  let [subcategory , setSubcategory] = useState([])
+  let [brand , setBrand] = useState([])
+  let [oldPic , setOldPic] = useState([])
   let refdiv = useRef(null)
-  let {id} =useParams()
-  let [flag,setFlag] =useState(false)
+  let [flag , setFlag] = useState(false)
+  let {_id} = useParams()
   let [data, setData] = useState({
     name: "",
     maincategory: "",
@@ -27,9 +30,9 @@ export default function AdminUpdateProduct() {
     discount: 0,
     finalPrice: 0,
     stock: true,
-    quantity: 0,
+    stockQuantity: 0,
     description: "",
-    pic: [],
+    pic: "",
     active: true,
   });
 
@@ -39,22 +42,23 @@ export default function AdminUpdateProduct() {
     size: "",
     basePrice: "",
     discount: "",
-    quantity: "",
-    pic: "",
+    stockQuantity: "",
+    pic: [""],
   });
   let [show, setShow] = useState(false);
 
   let navigate = useNavigate();
   let dispatch = useDispatch();
 
-  let ProductStateData = useSelector((state) => state.ProductStateData);
-  let MaincategoryStateData = useSelector((state) => state.MaincategoryStateData);
+  let MaincategoryStateData = useSelector( (state) => state.MaincategoryStateData);
   let SubcategoryStateData = useSelector((state) => state.SubcategoryStateData);
   let BrandStateData = useSelector((state) => state.BrandStateData);
+  let ProductStateData = useSelector((state)=>state.ProductStateData)
   function getInputData(e) {
     // console.log(e.target.files);
     let name = e.target.name;
-    let value = e.target.files ? data.pic.concat(Array.from(e.target?.files).map((item)=> "/products/" + item.name)): e.target.value;
+    // let value = e.target.files ? Array.from(e.target?.files).map((item)=> "/products/" + item.name): e.target.value;
+    let value = e.target.files ? e.target?.files: e.target.value;
     if (name !=="active") {
       setErrorMessage((old) => {
         return {
@@ -72,63 +76,100 @@ export default function AdminUpdateProduct() {
     });
   }
   function postData(e) {
-  console.log(errorMessage);
     e.preventDefault();
     let error = Object.values(errorMessage).find((x) => x.length > 0);
+
     if (error) setShow(true);
     else {
-      dispatch(updateProduct({
-         ...data,
-        maincategory:data.maincategory || MaincategoryStateData[0].name,
-        subcategory:data.subcategory || SubcategoryStateData[0].name,
-        brand:data.brand || BrandStateData[0].name,
-        basePrice:parseInt(data.basePrice),
-        discount:parseInt(data.discount),
-        finalPrice:parseInt(data.basePrice-data.basePrice*data.discount/100),
-        quantity:parseInt(data.quantity),
-        description:rte.getHTMLCode()
-        }));
-      navigate("/admin/product");
-    }
-  }
+      // dispatch(createProduct({
+      //    ...data,
+      //   maincategory:data.maincategory || MaincategoryStateData[0].name,
+      //   subcategory:data.subcategory || SubcategoryStateData[0].name,
+      //   brand:data.brand || BrandStateData[0].name,
+      //   basePrice:
+      //   discount:parseInt(data.discount),
+      //   finalPrice:parseInt(data.basePrice-data.basePrice*data.discount/100),
+      //   quantity:parseInt(data.quantity),
+      //   description:rte.getHTMLCode()
+      //   }));
+        let basePrice = parseInt(data.basePrice)
+        let discount = parseInt(data.discount)
+        let finalPrice = parseInt(data.basePrice-data.basePrice*data.discount/100)
 
-  useEffect(() =>{
-    rte = new window.RichTextEditor(refdiv.current);
-    rte.setHTMLCode("");
-  },[])
+        let formData = new FormData()
+
+        formData.append("_id" , data._id)
+        formData.append("name" , data.name)
+        formData.append("maincategory" , data.maincategory === "" ? maincategory[0]._id : data.maincategory)
+        formData.append("subcategory" , data.subcategory === "" ? subcategory[0]._id : data.subcategory)
+        formData.append("brand" , data.brand === "" ? brand[0]._id : data.brand)
+        formData.append("basePrice" , basePrice)
+        formData.append("discount" , discount)
+        formData.append("finalPrice" ,finalPrice)
+        formData.append("stock" , data.stock)
+        formData.append("size" , data.size)
+        formData.append("color" , data.color)
+        formData.append("stockQuantity" , data.stockQuantity)
+        formData.append("description" , rte.getHTMLCode())
+        formData.append("oldPic" ,oldPic)
+        Array.from(data.pic).forEach((p)=>{
+              formData.append("pic" , p)
+        })
+        formData.append("active" , data.active) 
+
+        dispatch(updateProduct(formData))
+      navigate("/admin/product");
+
+
+    }
+  } 
+
+  // useEffect(() =>{
+  //   rte = new window.RichTextEditor(refdiv.current);
+  //   rte.setHTMLCode("Hello World");
+  // },[])
 
 
 
 
   useEffect(() => {
     (() => {
-      dispatch(getMaincategory());
+      dispatch(getMaincategory())
+      if(MaincategoryStateData.length)
+        setMaincategory(MaincategoryStateData.filter((x)=>x.active === true))
+       
     })();
   }, [MaincategoryStateData.length]);
 
   useEffect(() => {
     (() => {
-      dispatch(getSubcategory());
+      dispatch(getSubcategory())
+      if(SubcategoryStateData.length)
+        setSubcategory(SubcategoryStateData.filter((x)=>x.active === true))
     })();
   }, [SubcategoryStateData.length]);
 
   useEffect(() => {
     (() => {
-      dispatch(getBrand());
+      dispatch(getBrand())
+      setBrand(BrandStateData.filter((x)=>x.active === true))
     })();
   }, [BrandStateData.length]);
 
-  useEffect(()=>{
-    (()=>{
+
+  useEffect(() => {
+    (() => {
       dispatch(getProduct())
       if(ProductStateData.length){
-        let item =ProductStateData.find((x)=>x.id===id)
-        setData({...item})
-    rte.setHTMLCode(item.description);
-
+     let item =  ProductStateData.find((x)=>x._id === _id)
+          setData(item)
+          setOldPic(item.pic)
+          rte = new window.RichTextEditor(refdiv.current);
+            rte.setHTMLCode(item.description);
       }
-    })()
-  },[ProductStateData.length])
+      
+    })();
+  }, [ProductStateData.length]);
   return (
     <>
       <div className="container-fluid">
@@ -139,7 +180,7 @@ export default function AdminUpdateProduct() {
 
           <div className="col-md-9">
             <h5 className="bg-primary p-2 text-center text-light">
-              Product
+          Admin Update  Product
               <Link to="/admin/product">
                 <i className="fa fa-backward text-light float-end"></i>
               </Link>
@@ -152,8 +193,8 @@ export default function AdminUpdateProduct() {
                 <input
                   type="text"
                   name="name"
-                  value={data.name}
                   onChange={getInputData}
+                  value={data.name}
                   className="form-control border-primary border-2"
                   id=""
                   placeholder="Product Name"
@@ -173,16 +214,13 @@ export default function AdminUpdateProduct() {
                   <select
                     name="maincategory"
                     onChange={getInputData}
-                  value={data.maincategory}
+                    value={data.maincategory}
 
                     className="form-select border-primary border-2"
                   >
-                    {MaincategoryStateData.map((item, index) => {
-                      return (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
+                    {
+                maincategory.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
                     })}
                   </select>
                 </div>
@@ -190,46 +228,52 @@ export default function AdminUpdateProduct() {
                 <div className="col-md-3 col-sm-6 mb-3">
                   <label>Subcategory</label>
                   <select
-                    name="subcategory"
+                    name="Subcategory"
                     onChange={getInputData}
-                  value={data.subcategory}
-
+                    value={data.subcategory}
                     className="form-select border-primary border-2"
                   >
-                    {SubcategoryStateData.map((item, index) => {
-                      return (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
+                    {
+                    // subcategory.map((item, index) => {
+                    //   return (
+                    //     <option key={index} value={item.name}>
+                    //       {item.name}
+                    //     </option>
+                    //   );
+                  subcategory.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
+                      
                     })}
                   </select>
                 </div>
                 <div className="col-md-3 col-sm-6 mb-3">
-                  <label>Brand*</label>
+                  <label>Brand</label>
                   <select
                     name="brand"
                     onChange={getInputData}
-                  value={data.brand}
+                    value={data.brand}
 
                     className="form-select border-primary border-2"
                   >
-                    {BrandStateData.map((item, index) => {
-                      return (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
+                    {
+                    // subcategory.map((item, index) => {
+                    //   return (
+                    //     <option key={index} value={item.name}>
+                    //       {item.name}
+                    //     </option>
+                    //   );
+                    brand.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
                     })}
                   </select>
                 </div>
+
                 <div className="col-md-3 col-sm-6 mb-3">
                   <label>Stock*</label>
                   <select
                     name="stock"
                     onChange={getInputData}
-                  value={data.stock}
-
+                    value={data.stock?"true":"false"}
                     className="form-select border-primary border-2"
                   >
                     <option value="true">In Stock</option>
@@ -243,9 +287,8 @@ export default function AdminUpdateProduct() {
                   <input
                     type="text "
                     name="color"
-                  value={data.color}
-
                      onChange={getInputData}
+                     value={data.color}
                     placeholder="color"
                     className="form-control border-primary border-2"
                   />
@@ -264,9 +307,8 @@ export default function AdminUpdateProduct() {
                   <input
                     type="text "
                     name="size"
-                  value={data.size}
-
                      onChange={getInputData}
+                     value={data.size}
                     placeholder="size"
                     className="form-control border-primary border-2"
                   />
@@ -286,9 +328,8 @@ export default function AdminUpdateProduct() {
                   <input
                     type="number"
                     name="basePrice"
-                  value={data.basePrice}
-
                      onChange={getInputData}
+                     value={data.basePrice}
                     placeholder="Base Price"
                     className="form-control border-primary border-2"
                   />
@@ -307,9 +348,8 @@ export default function AdminUpdateProduct() {
                   <input
                     type="number"
                     name="discount"
-                  value={data.discount}
-
                      onChange={getInputData}
+                     value={data.discount}
                     placeholder="Discount"
                     className="form-control border-primary border-2"
                   />
@@ -322,6 +362,7 @@ export default function AdminUpdateProduct() {
                     ""
                   )}
                 </div>
+                
               </div>
               <div className="mb-3">
                 <label>Description*</label>
@@ -329,11 +370,10 @@ export default function AdminUpdateProduct() {
               </div>
               <div className="row">
                 <div className="col-md-6 mb-3">
-                  <label>Pic</label>
+                  <label>Pic*</label>
                   <input
                     type="file"
                     name="pic"
-
                     multiple
                     onChange={getInputData}
                     className="form-control border-primary border-2"
@@ -346,30 +386,26 @@ export default function AdminUpdateProduct() {
                     ""
                   )}
                 </div>
-<div className="col-md-6 mb-3">
+                <div className="col-md-6 mb-3">
 <label>Click on Image to Remove Old Image</label><br />
 {
-  data.pic?.map((item,index)=>{
-    return <img src={item} height={50} width={50}  alt="image" key={index} onClick={()=>{
-      data.pic.splice(index,1)
+  oldPic?.map((item,index)=>{
+    return <img src={`/${item}`} key={index}  height={50} width={50}  alt="image"  
+    onClick={()=>{
+      oldPic.splice(index,1)
       setFlag(!flag)
     }} />
   })
 }
 
 </div>
-               
-              </div>
-
-              <div className="row">
-              <div className="col-md-6 mb-3">
+                <div className="col-md-6 mb-3">
                   <label>Stock Quantity*</label>
                   <input
                     type="number"
-                    name="quantity"
-                  value={data.quantity}
-
+                    name="stockQuantity"
                     onChange={getInputData}
+                    value={data.stockQuantity}
                     placeholder="Stock Quantity"
                     className="form-control border-primary border-2"
                   />
@@ -381,13 +417,15 @@ export default function AdminUpdateProduct() {
                     ""
                   )}
                 </div>
+              </div>
+
+              <div className="row">
                 <div className="col-md-6 mb-3">
                   <label>Active*</label>
                   <select
                     onChange={getInputData}
+                    value={data.active}
                     name="active"
-                  value={data.active}
-
                     className="form-select border-primary border-2"
                   >
                     <option value="true">Yes</option>

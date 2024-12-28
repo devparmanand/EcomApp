@@ -71,7 +71,7 @@ export default function Navbar() {
           <NavLink to="/about" className="nav-item nav-link">About Us</NavLink>
           <NavLink to="/shop" className="nav-item nav-link">shop</NavLink>
           <NavLink to="/contact" className="nav-item nav-link">contact</NavLink>
-          <NavLink to="/admin" className="nav-item nav-link">Admin</NavLink>
+          {/* <NavLink to="/admin" className="nav-item nav-link">Admin</NavLink> */}
 
 
  {

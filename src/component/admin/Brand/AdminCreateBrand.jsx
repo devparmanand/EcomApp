@@ -32,7 +32,8 @@ export default function AdminCreateBrand() {
   function getInputData(e) {
     // console.log(e.target.files);
     let name = e.target.name;
-    let value = e.target.files ?"/brands/"+e.target.files[0].name : e.target.value ;
+    // let value = e.target.files ?"/brands/"+e.target.files[0].name : e.target.value ;
+    let value = e.target.files ?e.target.files[0] : e.target.value ;
     if (name === "name" || name === "pic"){
       setErrorMessage((old)=>{
         return{
@@ -73,7 +74,14 @@ export default function AdminCreateBrand() {
       }
       
        else {
-        dispatch(createBrand({ ...data }));
+        // dispatch(createBrand({ ...data }));
+        let formData = new FormData()
+        formData.append("name",data.name)
+        formData.append("pic",data.pic)
+        formData.append("active",data.active)
+
+        dispatch(createBrand(formData));
+
         navigate("/admin/brand");
       }
     }

@@ -22,7 +22,7 @@ function postData(){
   
   useEffect(()=>{
     (()=>{
-     dispatch(getNewsletter())
+    //  dispatch(getNewsletter())
     })()
   },[NewsletterStateData.length])
   return (

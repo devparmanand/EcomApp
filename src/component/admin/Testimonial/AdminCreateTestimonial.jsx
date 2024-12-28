@@ -29,7 +29,8 @@ export default function AdminCreateBrand() {
   );
   function getInputData(e) {
     let name = e.target.name;
-    let value = e.target.files ?"/testimonials/"+e.target.files[0].name : e.target.value ;
+    // let value = e.target.files ?"/testimonials/"+e.target.files[0].name : e.target.value ;
+    let value = e.target.files ?e.target.files[0]: e.target.value ;
     if (name!=="active"){
       setErrorMessage((old)=>{
         return{
@@ -53,9 +54,7 @@ export default function AdminCreateBrand() {
    if (error) 
     setShow(true);
     else {
-      let item = TestimonialStateData.find(
-        (x) => x.name.toLowerCase() === data.name.toLowerCase()
-      );
+      let item = TestimonialStateData.find((x) => x.name.toLowerCase() === data.name.toLowerCase());
 
       if (item) {
         setShow(true);
@@ -68,7 +67,14 @@ export default function AdminCreateBrand() {
       }
       
        else {
-        dispatch(createTestimonial({ ...data }));
+        // dispatch(createTestimonial({ ...data }));
+        let formData = new FormData()
+        formData.append("name" , data.name)
+        formData.append("message" , data.message)
+        formData.append("pic" , data.pic)
+        formData.append("active" , data.active)
+
+           dispatch(createTestimonial(formData))
         navigate("/admin/testimonial");
       }
     }

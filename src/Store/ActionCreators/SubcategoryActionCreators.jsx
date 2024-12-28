@@ -20,6 +20,7 @@ export function getSubcategory() {
 }
 
 export function updateSubcategory(data) {
+  
   return {
     type: UPDATE_SUBCATEGORY,
     payload: data,

@@ -7,9 +7,9 @@ import { getBrand,updateBrand, } from "../../../Store/ActionCreators/BrandAction
 import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminUpdateBrand() {
-  let {id}=useParams()
+  let {_id}=useParams()
   // let[Brand,setBrand]=useState([])
-
+ let [allData , setAllData] = useState([])
   let [data, setData] = useState({
     name: "",
     pic:"",
@@ -28,8 +28,8 @@ export default function AdminUpdateBrand() {
 
   function getInputData(e) {
     let name = e.target.name;
-    let value = e.target.files ?"/brands/"+e.target.files[0].name : e.target.value ;
-    if (name === "name" || name === "pic"){
+    let value = e.target.files ?e.target.files[0] : e.target.value ;
+    if (name !== "active"){
       setErrorMessage((old)=>{
         return{
           ...old,
@@ -54,7 +54,7 @@ export default function AdminUpdateBrand() {
     else {
       
       let item = BrandStateData.find((x)=> x.name.toLowerCase() === data.name.toLowerCase());
-      if (item && item.id!==id) {
+      if (item && item._id!==_id) {
         setShow(true);
         setErrorMessage((old)=>{
           return {
@@ -65,7 +65,13 @@ export default function AdminUpdateBrand() {
       } 
       else {
   
-      dispatch(updateBrand({...data}))
+      // dispatch(updateBrand({...data}))
+      let formData = new FormData()
+      formData.append("_id",data._id)
+      formData.append("name",data.name)
+      formData.append("pic",data.pic)
+      formData.append("active",data.active)
+      dispatch(updateBrand(formData))
         navigate("/admin/brand")
       }
 
@@ -77,12 +83,12 @@ export default function AdminUpdateBrand() {
      
       dispatch(getBrand())
       if(BrandStateData.length){
-        let item =BrandStateData.find((x)=>x.id===id)
-        if(item){
-         setData({...item})
-      
-      }
+           setAllData(BrandStateData)
+           setData(BrandStateData.find((x)=>x._id === _id))    
+           
     }
+    else
+    setAllData([])
      })()
     
    },[BrandStateData.length])

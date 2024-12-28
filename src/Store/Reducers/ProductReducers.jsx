@@ -12,17 +12,16 @@ let newState,index
             return action.payload
 
         case UPDATE_PRODUCT_RED:
-            index = state.findIndex((x) => x.id === action.payload.id)
+            index = state.findIndex((x) => x._id === action.payload._id)
             state[index].name=action.payload.name
             state[index].maincategory=action.payload.maincategory
             state[index].subcategory=action.payload.subcategory
-            state[index].name=action.payload.name
             state[index].brand=action.payload.brand
             state[index].color=action.payload.color
             state[index].size=action.payload.size
             state[index].basePrice=action.payload.basePrice
             state[index].discount=action.payload.discount
-            state[index].finalPrice=action.payload.name
+            state[index].finalPrice=action.payload.finalPrice
             state[index].quantity=action.payload.quantity
             state[index].stock=action.payload.stock
             state[index].pic=action.payload.pic
@@ -32,13 +31,13 @@ let newState,index
 
 
             case UPDATE_PRODUCT_QUANTITY_RED:
-                index = state.findIndex((x) => x.id === action.payload.id)
+                index = state.findIndex((x) => x._id === action.payload._id)
                state[index].quantity=action.payload.quantity
                if(state[index].quantity===0)
                 state[index].stock=false
               return state
         case DELETE_PRODUCT_RED:
-            return  newState= state.filter((x)=>x.id!== action.payload.id)
+            return  newState= state.filter((x)=>x._id!== action.payload._id)
     
     
     default:

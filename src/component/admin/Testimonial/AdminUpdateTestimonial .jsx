@@ -8,9 +8,9 @@ import { updateTestimonial } from "../../../Store/ActionCreators/TestimonialActi
 import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminUpdateTestimonial() {
-  let {id}=useParams()
+  let {_id}=useParams()
 //   let[Testimonial,setTestimonial]=useState([])
-
+   let [allData,setAllData]= useState([])
   let [data, setData] = useState({
     name: "",
     pic:"",
@@ -19,19 +19,19 @@ export default function AdminUpdateTestimonial() {
   });
 
   let [errorMessage, setErrorMessage] = useState({
-    name:"Name Field is Mandatory",
-    pic:"Pic Field is Mandatory",
-    message:"Message Field is Mandatory",
+    name:"",
+    pic:"",
+    message:"",
   });
   let [show, setShow] = useState(false);
 
   let navigate = useNavigate();
-  let dispatch=useDispatch()
+  let dispatch= useDispatch()
   let TestimonialStateData=useSelector((state)=>state.TestimonialStateData)
 
   function getInputData(e) {
     let name = e.target.name;
-    let value = e.target.files ?"/testimonials/"+e.target.files[0].name : e.target.value ;
+    let value = e.target.files ?e.target.files[0] : e.target.value ;
     if (name!=="active"){
       setErrorMessage((old)=>{
         return{
@@ -57,7 +57,7 @@ export default function AdminUpdateTestimonial() {
     else {
       
       let item = TestimonialStateData.find((x)=> x.name.toLowerCase() === data.name.toLowerCase());
-      if (item && item.id!==id) {
+      if (item && item._id!==_id) {
         setShow(true);
         setErrorMessage((old)=>{
           return {
@@ -68,7 +68,14 @@ export default function AdminUpdateTestimonial() {
       } 
       else {
   
-      dispatch(updateTestimonial({...data}))
+      // dispatch(updateTestimonial({...data}))
+      let formData = new FormData()
+      formData.append("_id" , data._id)
+      formData.append("name" , data.name)
+      formData.append("pic" , data.pic)
+      formData.append("message" , data.message)
+      formData.append("active" , data.active)
+      dispatch(updateTestimonial(formData))
         navigate("/admin/testimonial")
       }
 
@@ -79,14 +86,13 @@ export default function AdminUpdateTestimonial() {
     (()=>{
      
       dispatch(getTestimonial())
-      if(TestimonialStateData.length){
-        let item =TestimonialStateData.find((x)=>x.id===id)
-        if(item){
-         setData({...item})
-      
-      }
-    }
-     })()
+           if(TestimonialStateData.length){
+                setAllData(TestimonialStateData)
+                setData(TestimonialStateData.find((x)=>x._id === _id))    
+         }
+         else
+         setAllData([])
+          })()
     
    },[TestimonialStateData.length])
 

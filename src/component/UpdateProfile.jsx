@@ -24,53 +24,82 @@ export default function UpdateProfile() {
 
   function getInputData(e) {
     let name = e.target.name
-    let value = e.target.files? "/products/" + e.target.files[0].name: e.target.value;
-    if (name !== "name" || name === "pic" || name === "phone") {
+    // let value = e.target.files? "/products/" + e.target.files[0].name: e.target.value;
+    let value = e.target.files? e.target.files[0]: e.target.value;
+    if (name !== "name"  || name === "phone") {
       setErrorMessage((old) => {
         return {
           ...old,
-          [name]: e.target.files ? Imagevalidators(e) : Formvalidators(e),
-        };
-      });
+          [name]:  Formvalidators(e),
+        }
+      })
     }
 
     setData((old) => {
       return {
         ...old,
-        [name]: name === "active" ? (value === "true" ? true : false) : value,
-      };
-    });
+        [name]:  value
+      }
+    })
   }
   async function postData(e) {
     e.preventDefault();
-     let resposne = await fetch("/user/"  + localStorage.getItem("userid"), {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ ...data }),
-    });
+    let error = Object.values(errorMessage).find((x)=> x!=="")
+    if(error){
+      setShow(true)
+    }
+    else{
+      let formData = new FormData()
+      formData.append("_id" , data._id)
+      formData.append("name" , data.name)
+      formData.append("phone" , data.phone)
+      formData.append("address" , data.address)
+      formData.append("pin" , data.pin)
+      formData.append("state" , data.state)
+      formData.append("city" , data.city) 
+      formData.append("pic" , data.pic)
+      
+      
+      let resposne = await fetch("/api/user/"  + data._id, {
+        method: "PUT",
+        headers: {
+          "authorization":localStorage.getItem("token")
+        },
+        body:formData
+      });
     resposne = await resposne.json();
-    if (resposne) {
-      if (localStorage.getItem("role" === "Admin"))
-         navigate("/admin");
-      else navigate("/profile");
-    } else alert("Something Went Wrong");
+    if (resposne.result === "Done") {
+      if (data.role === "Buyer")
+         navigate("/profile");
+      else
+       navigate("/admin");
+    }
+     else alert("Something Went Wrong");
+    }
+  
+    
   }
 
   useEffect(() => {
     (async () => {
-      let response = await fetch("/user", {
-        method: "get",
+      let response = await fetch("/api/user/"+localStorage.getItem("userid"), {
+        method: "GET",
         headers: {
           "content-type": "application/json",
+        "authorization":localStorage.getItem("token")
+          
         },
       });
       response = await response.json();
-      let item = response.find((x) => x.id === localStorage.getItem("userid"));
-      if (item)
-         setData({ ...data, ...item });
-      else navigate("/login");
+      if (response.result === "Done")
+         setData((old)=>{
+        return{
+          ...old,
+          ...response.data
+        }
+        });
+      else
+       navigate("/login");
     })();
   }, []);
   return (

@@ -14,12 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 export default function AdminSubcategory() {
   let [data, setData] = useState([])
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "name", headerName: "Name", width: 200 },
+    { field: "_id", headerName: "ID", width: 250 },
+    { field: "name", headerName: "Name", width:150 },
     {
       field: "active",
       headerName: "Active",
-      width: 100,
+      width: 70,
       renderCell: ({row}) => 
         <p className={row.active ? "text-success" : "text-danger"}>
           {row.active ? "Yes" : "No"}
@@ -30,9 +30,9 @@ export default function AdminSubcategory() {
       field: "edit",
       headerName: "Edit",
       width: 100,
-      renderCell: (row) => (
+      renderCell: ({row}) => (
         <Link
-          to={`/admin/subcategory/update/${row.id} `}
+          to={`/admin/subcategory/update/${row._id} `}
           className="btn btn-primary"
         >
           <i className="fa fa-edit"></i>
@@ -43,62 +43,44 @@ export default function AdminSubcategory() {
       field: "delete",
       headerName: "Delete",
       width: 100,
-      renderCell: (row) => (
-        <button className="btn btn-danger" onClick={() => deleteData(row.id)}>
+      renderCell: ({row}) => (
+        <button className="btn btn-danger" onClick={() => deleteData(row._id)}>
           <i className="fa fa-trash"></i>
         </button>
       ),
     },
   ]
   let SubcategoryStateData=useSelector((state)=>state.SubcategoryStateData)
-    let dispatch = useDispatch();
+
+  let dispatch = useDispatch()
 
   //data get karne ke liye
 
-   function deleteData(id) {
+   function deleteData(_id) {
     if (window.confirm("Are You Sure to Delete that Item: ")) {
-      // let response=await fetch("http://localhost:8000/subcategory/"+id,{
-      //   method:"DELETE",
-      //   headers:{
-      //     "content-type":"application/json"
-      //   },
-      //   body:JSON.stringify({...data})
-      // })
-      // response=await response.json()
+    
       dispatch(getSubcategory())
       if (SubcategoryStateData.length)
         setData(SubcategoryStateData);
-      // setData(response)
-      dispatch(deleteSubcategory({ id: id }));
-    
-  
+      dispatch(deleteSubcategory({ _id: _id }));
       getAPIData();
     }
   }
 
  function getAPIData() {
-    // let response= await fetch("http://localhost:8000/subcategory",{
-    //   method:"GET",
-    //   headers:{
-    //     "content-type":"application/json"
-    //   },
-    //   // body:JSON.stringify({...data})
-    // })
-    // response=await response.json()
     dispatch(getSubcategory())
     if (SubcategoryStateData.length)
       setData(SubcategoryStateData);
-    // setData(response)
     else
      setData([]);
   }
 
+
+
   useEffect(() => {
     getAPIData();
   }, [SubcategoryStateData.length]);
-  // useEffect(() => {
-  //   getAPIData()
-  // },[])
+
    return(
     <>
       <div className="container-fluid">
@@ -119,6 +101,7 @@ export default function AdminSubcategory() {
                 <DataGrid
                   rows={data}
                   columns={columns}
+                  getRowId={(row)=>row._id}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 5 },
