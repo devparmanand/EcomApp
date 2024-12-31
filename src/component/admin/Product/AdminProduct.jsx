@@ -98,14 +98,14 @@ export default function AdminProduct() {
     //   headers:{
     //     "content-type":"application/json"
     //   },
-    //   // body:JSON.stringify({...data})
+    //   // body:JSON.stringify({...data}) 
     // })
     // response=await response.json()
     dispatch(getProduct())
     if (ProductStateData.length){
       setData(ProductStateData);
       let item = ProductStateData.map((x)=>x.maincategory.name)
-      // console.log(item[0]);
+      console.log(item[0]);
       setMaincategor0y(item)
       setMaincategor0y(data)
            
@@ -194,7 +194,7 @@ export default function AdminProduct() {
                         <td>{item.color}</td>
                         <td>{item.size}</td>
                         <td><span>&#8377;{item.basePrice}</span></td>
-                        <td><span>{item.discount}% Off</span></td>
+                        <td><  span>{item.discount}% Off</span></td>
                         <td><span>&#8377;{item.finalPrice}</span></td>
                         <td className={`${item.stock?"text-success":"text-danger"}`}>
                         <div style={{width:100}}>

@@ -43,7 +43,7 @@ export default function AdminUpdateProduct() {
     basePrice: "",
     discount: "",
     stockQuantity: "",
-    pic: [""],
+  
   });
   let [show, setShow] = useState(false);
 
@@ -225,7 +225,7 @@ export default function AdminUpdateProduct() {
                   </select>
                 </div>
 
-                <div className="col-md-3 col-sm-6 mb-3">
+                {/* <div className="col-md-3 col-sm-6 mb-3">
                   <label>Subcategory</label>
                   <select
                     name="Subcategory"
@@ -234,18 +234,28 @@ export default function AdminUpdateProduct() {
                     className="form-select border-primary border-2"
                   >
                     {
-                    // subcategory.map((item, index) => {
-                    //   return (
-                    //     <option key={index} value={item.name}>
-                    //       {item.name}
-                    //     </option>
-                    //   );
                   subcategory.map((item, index) => {
                       return  <option key={index} value={item._id}>{item.name}</option>
                       
                     })}
                   </select>
+                </div> */}
+                <div className="col-md-3 col-sm-6 mb-3">
+                  <label>Subcategory</label>
+                  <select
+                    name="subcategory"
+                    onChange={getInputData}
+                    value={data.subcategory}
+
+                    className="form-select border-primary border-2"
+                  >
+                    {
+                    subcategory.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
+                    })}
+                  </select>
                 </div>
+
                 <div className="col-md-3 col-sm-6 mb-3">
                   <label>Brand</label>
                   <select
@@ -256,17 +266,12 @@ export default function AdminUpdateProduct() {
                     className="form-select border-primary border-2"
                   >
                     {
-                    // subcategory.map((item, index) => {
-                    //   return (
-                    //     <option key={index} value={item.name}>
-                    //       {item.name}
-                    //     </option>
-                    //   );
                     brand.map((item, index) => {
                       return  <option key={index} value={item._id}>{item.name}</option>
                     })}
                   </select>
                 </div>
+
 
                 <div className="col-md-3 col-sm-6 mb-3">
                   <label>Stock*</label>

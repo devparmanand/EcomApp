@@ -202,8 +202,21 @@ export default function AdminCreateProduct() {
                     })}
                   </select>
                 </div>
-
                 <div className="col-md-3 col-sm-6 mb-3">
+                  <label>Subcategory*</label>
+                  <select
+                    name="subcategory"
+                    onChange={getInputData}
+                    className="form-select border-primary border-2"
+                  >
+                    {
+                subcategory.map((item, index) => {
+                      return  <option key={index} value={item._id}>{item.name}</option>
+                    })}
+                  </select>
+                </div>
+
+                {/* <div className="col-md-3 col-sm-6 mb-3">
                   <label>Subcategory</label>
                   <select
                     name="Subcategory"
@@ -211,18 +224,13 @@ export default function AdminCreateProduct() {
                     className="form-select border-primary border-2"
                   >
                     {
-                    // subcategory.map((item, index) => {
-                    //   return (
-                    //     <option key={index} value={item.name}>
-                    //       {item.name}
-                    //     </option>
-                    //   );
+              
                   subcategory.map((item, index) => {
                       return  <option key={index} value={item._id}>{item.name}</option>
                       
                     })}
                   </select>
-                </div>
+                </div> */}
                 <div className="col-md-3 col-sm-6 mb-3">
                   <label>Brand</label>
                   <select

@@ -1,7 +1,6 @@
 //Single Term Methode
 //API Ka Path sahi se de varna Error aati hai
 export async function createRecord(collection, payload) {
-  console.log(payload);
   
   let response = await fetch(`/api/${collection}`,
     {

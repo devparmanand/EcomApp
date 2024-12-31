@@ -21,7 +21,6 @@ export default function Home() {
  useEffect(()=>{
   (()=>{
     dispatch(getProduct())
-    console.log(ProductStateData);
     
   })()
  },[ProductStateData.length])
