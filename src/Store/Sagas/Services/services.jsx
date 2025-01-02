@@ -30,8 +30,8 @@ export async function createRecordFormData(collection, payload) {
 }
 
 export async function getRecord(collection) {
-  let response = await fetch(`/api/${collection}`,
-    {
+  let url = collection==="cart" || collection==="wishlist" ? `/api/${collection}/${localStorage.getItem("userid")}`:`/api/${collection}`
+  let response = await fetch(url,{
       method: "GET",
       headers: {
         "content-type": "application/json",

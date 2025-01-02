@@ -7,9 +7,11 @@ import { getCart,createCart } from '../Store/ActionCreators/CartActionCreators'
 import { getWishlist,createWishlist } from '../Store/ActionCreators/WishlistActionCreators'
 
 export default function Product() {
-  let {id}=useParams()
-  let[product,setProduct]=useState({})
+  let {_id}=useParams()
+  let[product,setProduct]=useState({pic:[]})
   let[relatedProducts,setRelatedProducts]=useState([])
+  let [cart ,setCart] = useState([])
+  let [wishlist ,setWishlist] = useState([])
   let[qty,setQty]=useState(1)
  let navigate=useNavigate()
   let dispatch=useDispatch()
@@ -18,41 +20,29 @@ export default function Product() {
   let WishlistStateData=useSelector((state)=>state.WishlistStateData)
 
   function addtoCart(){
-let item =CartStateData.find((x)=>x.user=== localStorage.getItem("userid") && x.product===id)
+let item = cart.find((x)=>x.user=== localStorage.getItem("userid") && x.product===_id)
   if(!item){
     item={
       user:localStorage.getItem("userid"),
-      product:product.id,
-      name:product.name,
-      brand:product.brand,
-      color:product.color,
-      size:product.size,
-      pic:product.pic,
-      price:product.finalPrice,
+      product:product._id,
       qty:qty,
       total:product.finalPrice*qty,
-      stockQuantity:product.quantity,
     }
-    dispatch(createCart(item))
+    dispatch(createCart({...item}))
   }
   navigate("/cart")
 }
 function addtoWishlist(){
-  let item =WishlistStateData.find((x)=>x.user=== localStorage.getItem("userid") && x.product===id)
+  let item = wishlist.find((x)=>x.user=== localStorage.getItem("userid") && x.product===_id)
     if(!item){
       item={
         user:localStorage.getItem("userid"),
-        product:product.id,
-        name:product.name,
-        brand:product.brand,
-        color:product.color,
-        size:product.size,
-        pic:product.pic,
-        price:product.finalPrice,
+        product:product._id,
+        
        
   
       }
-      dispatch(createWishlist(item))
+      dispatch(createWishlist({...item}))
     }
     navigate("/profile")
   }
@@ -60,27 +50,32 @@ function addtoWishlist(){
     (()=>{
 dispatch(getProduct())
 if(ProductStateData.length){
-  let item= ProductStateData.find((x)=>x.id===id)
+  let item= ProductStateData.find((x)=>x._id===_id)
   setProduct(item)
-  setRelatedProducts(ProductStateData.filter((x)=>x.maincategpry === item.maincategpry))
+  setRelatedProducts(ProductStateData.filter((x)=>x.maincategory._id === item.maincategory._id))
 
 }
     })()
-  },[ProductStateData.length,id])
+  },[ProductStateData.length])
 
   useEffect(()=>{
-    (()=>{
 dispatch(getCart())
-})()
-  },[CartStateData.length])
+if(CartStateData.length){
+setCart(CartStateData)
+
+}
+  })
 
 
   useEffect(()=>{
     (()=>{
 dispatch(getWishlist())
+if(WishlistStateData.length){
+  setWishlist(WishlistStateData)
+}
 
     })()
-  },[WishlistStateData.length])
+  })
 
 
   
@@ -92,12 +87,12 @@ dispatch(getWishlist())
         <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
   <div className="carousel-inner">
     <div className="carousel-item active">
-      <img src={product.pic && product.pic[0]} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
+      <img src={product.pic && `/${product.pic[0]}`} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
     </div>
     {
       product.pic && product.pic.slice(1).map((item,index)=>{
        return <div className="carousel-item">
-         <img src={item} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
+         <img src={`/${item}`} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
        </div>
       })
     }
@@ -111,7 +106,7 @@ dispatch(getWishlist())
     <span className="carousel-control-next-icon" aria-hidden="true"></span>
     <span className="visually-hidden">Next</span>
   </button>
-</div>
+        </div>
         </div>
         <div className="col-md-6">
           <h5 className='bg-primary text-center p-2 text-light'>{product.name}</h5>
@@ -119,15 +114,15 @@ dispatch(getWishlist())
             <tbody>
             <tr>
               <th>Maincategory</th>
-              <td>{product.maincategory}</td>
+              <td>{product.maincategory?.name}</td>
             </tr>
             <tr>
               <th>Subategory</th>
-              <td>{product.subcategory}</td>
+              <td>{product.subcategory?.name}</td>
             </tr>
             <tr>
               <th>Brand</th>
-              <td>{product.brand}</td>
+              <td>{product.brand?.name}</td>
             </tr>
             <tr>
               <th>Color/Size</th>
@@ -140,14 +135,14 @@ dispatch(getWishlist())
             </tr>
             <tr>
               <th>Stock</th>
-              <td>{product.stock?`In Stock/${product.quantity} Quantity Left in Stock`:"Out of Stock"}</td>
+              <td>{product.stock?`In Stock/${product.stockQuantity} Quantity Left in Stock`:"Out of Stock"}</td>
             </tr>
             <tr>
               <td colSpan={2}>
                 <p>
                   <button className='btn btn-primary' onClick={()=>qty>1?setQty(qty-1):""}><i className='fa fa-minus'></i></button>
                 <span className='mx-3'>{qty}</span>
-                  <button className='btn btn-primary' onClick={()=>qty<product.quantity?setQty(qty+1):""}><i className='fa fa-plus'></i></button>
+                  <button className='btn btn-primary' onClick={()=>qty<product.stockQuantity?setQty(qty+1):""}><i className='fa fa-plus'></i></button>
                 </p>
                 <div className="btn-group">
                   <button className='btn btn-primary'onClick={addtoCart}><i className='fa fa-shopping-cart'>Add to Cart</i></button>
@@ -158,7 +153,8 @@ dispatch(getWishlist())
             <tr>
               <th>Description</th>
               <td>
-              <div dangerouslySetInnerHTML={{__html:product.description}}/>
+              {/* <div dangerouslySetInnerHTML={{__html:product.description}}/> */}
+              {product.description}
               </td>
             </tr>
             </tbody>

@@ -27,19 +27,19 @@ export default function Shop() {
     if (mc === "" && sc === "" && br === "")
        data =ProductStateData;
     else if (mc !== "" && sc === "" && br === "")
-      data = ProductStateData.filter((x) => x.maincategory === mc);
+      data = ProductStateData.filter((x) => x.maincategory?.name === mc);
 else if (mc==="" && sc !== "" && br==="" )
-  data =ProductStateData.filter((x)=>x.subcategory===sc)
+  data =ProductStateData.filter((x)=>x.subcategory?.name===sc)
 else if (mc==="" && sc==="" && br !=="")
-  data=ProductStateData.filter((x)=> x.brand===br)
+  data=ProductStateData.filter((x)=> x.brand?.name===br)
 else if (mc!=="" && sc!=="" && br ==="")
-  data=ProductStateData.filter((x)=> x.maincategory===mc && x.subcategory ===sc)
+  data=ProductStateData.filter((x)=> x.maincategory?.name===mc && x.subcategory?.name ===sc)
 else if (mc!=="" && sc==="" && br !=="")
-  data=ProductStateData.filter((x)=> x.maincategory===mc && x.brand ===br)
+  data=ProductStateData.filter((x)=> x.maincategory?.name===mc && x.brand?.name ===br)
 else if (mc==="" && sc!=="" && br !=="")
-  data=ProductStateData.filter((x)=> x.subcategory ===sc && x.brand ===br )
+  data=ProductStateData.filter((x)=> x.subcategory?.name ===sc && x.brand?.name ===br )
 else
-data=ProductStateData.filter((x)=>x.maincategory===mc && x.subcategory ===sc && x.brand ===br )
+data=ProductStateData.filter((x)=>x.maincategory?.name===mc && x.subcategory?.name ===sc && x.brand?.name ===br )
 
 if(min===-1 || max===-1)
     setProducts(data);
@@ -57,7 +57,7 @@ if(min===-1 || max===-1)
 
   function sortFilter(option){
 if(option==="1")
-  setProducts(products.sort((x,y)=>y.id.localCompare(x.id)))
+  setProducts(products.sort((x,y)=>y._id.localCompare(x._id)))
 else if(option==="2")
   setProducts(products.sort((x,y)=>x.finalPrice-y.finalPrice))
 else
@@ -69,10 +69,17 @@ setFlag(!flag)
 function postSearch(e){
   e.preventDefault()
   let src=search.toLowerCase()
-  setProducts(ProductStateData.filter(x=>x.name.toLowerCase().includes(src) || x.maincategory.toLowerCase() ===src 
-  || x.subcategory.toLowerCase() ===src  || x.brand.toLowerCase() ===src || x.color.toLowerCase() ===src 
+  setProducts(ProductStateData.filter(x=>x.name.toLowerCase().includes(src) || x.maincategory?.name.toLowerCase() ===src 
+  || x.subcategory?.name.toLowerCase() ===src  || x.brand?.name.toLowerCase() ===src || x.color.toLowerCase() ===src 
   || x.description?.toLowerCase().includes(src)))
 }
+
+// function searchRecord(e){
+//   let src=search.toLowerCase()
+//   setProducts(ProductStateData.filter(x=>x.name.toLowerCase().includes(src) || x.maincategory?.name.toLowerCase() ===src 
+//   || x.subcategory?.name.toLowerCase() ===src  || x.brand?.name.toLowerCase() ===src || x.color.toLowerCase() ===src 
+//   || x.description?.toLowerCase().includes(src)))
+// }
 
   useEffect(() => {
     (() => {

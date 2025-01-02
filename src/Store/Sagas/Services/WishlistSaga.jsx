@@ -5,12 +5,12 @@ import {createRecord, deleteRecord, getRecord,} from "./services"
 
 function* createSaga(action){
 let response= yield createRecord("wishlist",action.payload)
-yield put({type:CREATE_WISHLIST_RED,payload:response})
+yield put({type:CREATE_WISHLIST_RED,payload:response.data})
 }
 
 function* getSaga(){
  let  response= yield getRecord("wishlist")
-  yield put({type:GET_WISHLIST_RED,payload:response})
+  yield put({type:GET_WISHLIST_RED,payload:response.data})
   }
 
   // function* updateSaga(action){

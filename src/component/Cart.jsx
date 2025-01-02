@@ -16,9 +16,9 @@ export default function Cart() {
     
   
 
-    function deleteData(id) {
+    function deleteData(_id) {
         if (window.confirm("Are You Sure to Remove Item from Cart: ")) {
-        dispatch(deleteCart({ id: id }));
+        dispatch(deleteCart({ _id: _id }));
         getAPIData();
         }
       }
@@ -29,12 +29,12 @@ if(item.qty===1 && option==="DEC")
   return
 else if(option==="DEC"){
   item.qty=item.qty-1
-  item.total=item.total-item.price
+  item.total=item.total-item.finalPrice
 }
 else{
- if(item.qty <item.stockQuantity){
+ if(item.qty <item?.stockQuantity){
   item.qty=item.qty+1
-  item.total=item.total+item.price
+  item.total=item.total+item?.finalPrice
  }
 }
  dispatch(updateCart({...item}))
@@ -43,7 +43,7 @@ else{
       function getAPIData(){
         dispatch(getCart())
         if(CartStateData.length){
-            let data=CartStateData.filter((x)=>x.user===localStorage.getItem("userid"))
+            let data=CartStateData
             setCart(data)
             let sum=0;
             for(let item of data){
@@ -96,8 +96,8 @@ else{
                 cart.map((item,index)=>{
                     return  <tr key={index}>
                     <td>
-                        <a href={item.pic} target='_blank' rel='noreferrer'></a>
-                        <img src={item.pic} height={50} width={50} alt="" />
+                        <a href={`/${item.pic}`} target='_blank' rel='noreferrer'></a>
+                        <img src={`/${item.pic}`} height={50} width={50} alt="" />
                     </td>
 <td>{item.name}</td>
 <td>{item.brand}</td>

@@ -7,6 +7,8 @@ import {
 } from "../Constant";
 
 export function createCart(data) {
+  console.log(data);
+  
   return {
     type: CREATE_CART,
     payload: data,
