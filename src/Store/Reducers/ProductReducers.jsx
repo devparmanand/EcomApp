@@ -30,12 +30,12 @@ let newState,index
             return state
 
 
-            case UPDATE_PRODUCT_QUANTITY_RED:
-                index = state.findIndex((x) => x._id === action.payload._id)
-               state[index].quantity=action.payload.quantity
-               if(state[index].quantity===0)
-                state[index].stock=false
-              return state
+            // case UPDATE_PRODUCT_QUANTITY_RED:
+            //     index = state.findIndex((x) => x._id === action.payload._id)
+            //    state[index].quantity=action.payload.quantity
+            //    if(state[index].quantity===0)
+            //     state[index].stock=false
+            //   return state
         case DELETE_PRODUCT_RED:
             return  newState= state.filter((x)=>x._id!== action.payload._id)
     

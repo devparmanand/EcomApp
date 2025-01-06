@@ -17,7 +17,7 @@ export default function Profile() {
     let CheckoutStateData=useSelector((state)=>state.CheckoutStateData)
     useEffect(()=>{
         (async()=>{
-let response = await fetch("/api/user",{
+let response = await fetch("/api/user/"+localStorage.getItem("userid"),{
     method:"GET",
     headers:{
         "content-type":"application/json",
@@ -26,9 +26,9 @@ let response = await fetch("/api/user",{
 
 })
 response=await response.json()
-
 if(response.result === "Done")
     setUser(response.data)
+
 else
 navigate("/login")
         })()
@@ -36,14 +36,16 @@ navigate("/login")
 function getAPIData(){
     dispatch(getWishlist())
     if(WishlistStateData.length)
-        setWishlist(WishlistStateData.filter((x)=>x.user===localStorage.getItem("userid")))
+        setWishlist(WishlistStateData)
    else
    setWishlist([])
 }
 
-function deleteData(id) {
+function deleteData(_id) {
+    // console.log(_id);
+    
     if (window.confirm("Are You Sure to Remove Item from Wishlist: ")) {
-    dispatch(deleteWishlist({ id: id }));
+    dispatch(deleteWishlist({ _id: _id }));
     getAPIData();
     }
   }
@@ -58,7 +60,10 @@ useEffect(()=>{
     (()=>{
     dispatch(getCheckout())
     if(CheckoutStateData.length){
-        setOrders(CheckoutStateData.filter((x)=>x.user===localStorage.getItem("userid"))) //yaha se corrent user ke checkout filter ho jayenge
+        
+        setOrders(CheckoutStateData) //yaha se corrent user ke checkout filter ho jayenge
+    // console.log(CheckoutStateData);
+    
     }
    })()
 },[CheckoutStateData.length])
@@ -104,16 +109,18 @@ useEffect(()=>{
                 wishlist.map((item,index)=>{
                     return  <tr key={index}>
                     <td>
-                        <a href={item.pic} target='_blank' rel='noreferrer'></a>
-                        <img src={item.pic} height={50} width={50} alt="" />
+                        <a href={`/${item.product?.pic[0]}`} target='_blank' rel='noreferrer'>
+                        <img src={`/${item.product?.pic[0]}`} height={50} width={50} alt="" />
+                        
+                        </a>
                     </td>
-                    <td>{item.name}</td>
-                    <td>{item.brand}</td>
-                    <td>{item.color}</td>
-                    <td>{item.size}</td>
-                    <td>&#8377;{item.price}</td>
-                    <td><Link to={`/product/${item.product}`} className='btn btn-primary'><i className='fa fa-shopping-cart'></i></Link></td>
-                    <td><button className='btn btn-danger' onClick={()=>deleteData(item.id)}><i className='fa fa-trash'></i></button></td>
+                    <td>{item.product?.name}</td>
+                    <td>{item.product?.brand.name}</td>
+                    <td>{item.product?.color}</td>
+                    <td>{item.product?.size}</td>
+                    <td>&#8377;{item.product?.finalPrice}</td>
+                    <td><Link to={`/product/${item.product?._id}`} className='btn btn-primary'><i className='fa fa-shopping-cart'></i></Link></td>
+                    <td><button className='btn btn-danger' onClick={()=>deleteData(item._id)}><i className='fa fa-trash'></i></button></td>
                 </tr>
                 })
                }
@@ -138,7 +145,7 @@ useEffect(()=>{
                     <tbody>
                         <tr>
                             <th>Order Id</th>
-                            <td>{item.id}</td>
+                            <td>{item._id}</td>
                         </tr>
                         <tr>
                             <th>Order Status</th>
@@ -189,19 +196,21 @@ useEffect(()=>{
                 </thead>
                 <tbody>
                {
-                item.products.map((item,index)=>{
-                    return  <tr   key={index}>
+                item.products.map((p,ind)=>{
+                    return  <tr   key={ind}>
                     <td>
-                        <a href={item.pic} target='_blank' rel='noreferrer'></a>
-                        <img src={item.pic} height={50} width={50} alt="" />
+                        <a href={`/${p.product?.pic[0]}`} target='_blank' rel='noreferrer'>
+                        <img src={`/${p.product?.pic[0]}`} height={50} width={50} alt="" />
+                        
+                        </a>
                     </td>
-                    <td>{item.name}</td>
-                    <td>{item.brand}</td>
-                    <td>{item.color}</td>
-                    <td>{item.size}</td>
-                    <td>&#8377;{item.price}</td>
-                    <td>{item.qty}</td>
-                    <td>&#8377;{item.total}</td>
+                    <td>{p.product?.name}</td>
+                    <td>{p.product?.brand.name}</td>
+                    <td>{p.product?.color}</td>
+                    <td>{p.product?.size}</td>
+                    <td>&#8377;{p.product?.finalPrice}</td>
+                    <td>{p.qty}</td>
+                    <td>&#8377;{p.total}</td>
                 </tr>
                 })
                }

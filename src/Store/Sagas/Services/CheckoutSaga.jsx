@@ -5,17 +5,17 @@ import {createRecord, deleteRecord, getRecord, updateRecord} from "./services"
 
 function* createSaga(action){
 let response= yield createRecord("checkout",action.payload)
-yield put({type:CREATE_CHECKOUT_RED,payload:response})
+yield put({type:CREATE_CHECKOUT_RED,payload:response.data})
 }
 
 function* getSaga(){
  let  response= yield getRecord("checkout")
-  yield put({type:GET_CHECKOUT_RED,payload:response})
+  yield put({type:GET_CHECKOUT_RED,payload:response.data})
   }
 
   function* updateSaga(action){
-    yield updateRecord("checkout",action.payload)
-    yield put({type:UPDATE_CHECKOUT_RED,payload:action.payload})
+   let response= yield updateRecord("checkout",action.payload)
+    yield put({type:UPDATE_CHECKOUT_RED,payload:response.data})
     }
     
     function* deleteSaga(action){

@@ -19,7 +19,6 @@ export default function UpdateProfile() {
   let [errorMessage, setErrorMessage] = useState({
     name: "",
     phone: "",
-    pic: "",
   });
 
   function getInputData(e) {
@@ -68,13 +67,16 @@ export default function UpdateProfile() {
         body:formData
       });
     resposne = await resposne.json();
+    // console.log(data.role);
+    
     if (resposne.result === "Done") {
       if (data.role === "Buyer")
          navigate("/profile");
       else
        navigate("/admin");
     }
-     else alert("Something Went Wrong");
+     else 
+     alert("Something Went Wrong");
     }
   
     

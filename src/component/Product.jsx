@@ -64,7 +64,7 @@ if(CartStateData.length){
 setCart(CartStateData)
 
 }
-  })
+  } , CartStateData.length)
 
 
   useEffect(()=>{
@@ -75,7 +75,7 @@ if(WishlistStateData.length){
 }
 
     })()
-  })
+  },WishlistStateData.length)
 
 
   
@@ -91,7 +91,7 @@ if(WishlistStateData.length){
     </div>
     {
       product.pic && product.pic.slice(1).map((item,index)=>{
-       return <div className="carousel-item">
+       return <div className="carousel-item" key={index}>
          <img src={`/${item}`} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
        </div>
       })
@@ -153,8 +153,7 @@ if(WishlistStateData.length){
             <tr>
               <th>Description</th>
               <td>
-              {/* <div dangerouslySetInnerHTML={{__html:product.description}}/> */}
-              {product.description}
+              <div dangerouslySetInnerHTML={{__html:product.description}}/>
               </td>
             </tr>
             </tbody>

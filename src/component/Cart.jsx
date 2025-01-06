@@ -16,6 +16,22 @@ export default function Cart() {
 
   let CartStateData = useSelector((state) => state.CartStateData);
 
+function calculate(data) {
+  let sum = 0;
+      for (let item of data) {
+        sum = sum + item.total;
+      }
+      setSubtotal(sum);
+      if (sum > 0 && sum < 1000) {
+        setShipping(150);
+        setTotal(sum + 150);
+      } else {
+        setTotal(sum);
+        setShipping(0);
+      }
+  
+}
+
   function deleteData(_id) {
     if (window.confirm("Are You Sure to Remove Item from Cart: ")) {
       dispatch(deleteCart({ _id: _id }));
@@ -25,39 +41,38 @@ export default function Cart() {
 
   function updateData(_id, option) {
     let item = cart.find((x) => x._id === _id)
-    let index = cart.find((x) => x._id === _id)
-
-    if (item.qty === 1 && option === "DEC")
-       return;
+    let index = cart.findIndex((x) => x._id === _id)
+// console.log(item);
+// return
+    if (item){
+      if(option === "DEC" && item.qty===1)
+        return
     else if (option === "DEC") {
       item.qty = item.qty - 1;
-      item.total = item.total - item.finalPrice;
-    } else {
-      if (item.qty < item?.stockQuantity) {
+      item.total = item.total - item.product?.finalPrice;
+    }
+     else {
+      if (item.qty < item.product?.stockQuantity) {
         item.qty = item.qty + 1;
-        item.total = item.total + item?.finalPrice;
+        item.total = item.total + item.product?.finalPrice;
       }
     }
     dispatch(updateCart({ ...item }));
+    cart[index].qty=item.qty
+    cart[index].total=item.total
+ calculate(cart)
+     
+    }
+   
   }
   function getAPIData() {
     dispatch(getCart());
     if (CartStateData.length) {
       let data = CartStateData;
       setCart(data);
-      let sum = 0;
-      for (let item of data) {
-        sum = sum + item.total;
-      }
-      setSubtotal(sum);
-      if (sum > 0 && sum < 1000) {
-        setShipping(150);
-        setSubtotal(sum + 150);
-      } else {
-        setTotal(sum);
-        setShipping(0);
-      }
-    } else setCart([]);
+    calculate(data)
+    } else 
+    setCart([]);
   }
   useEffect(() => {
     (() => {

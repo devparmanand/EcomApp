@@ -9,8 +9,9 @@ import ProfileTable from "./partials/ProfileTable";
 import { createCheckout } from "../Store/ActionCreators/CheckoutActionCreators ";
 import {
   getProduct,
-  updateProductQuantity,
+
 } from "../Store/ActionCreators/ProductActionCreators";
+import { updateProduct } from "../Store/ActionCreators/ProductActionCreators";
 export default function Checkout() {
   let [user, setUser] = useState({});
 
@@ -38,12 +39,19 @@ export default function Checkout() {
       products: cart,
     };
     dispatch(createCheckout(item));
+    console.log(item);
+    
     for (let item of cart) {
-      let p = ProductStateData.find((x) => x.id === item.product);
-      p.quantity = p.quantity - item.qty;
-      if (p.quantity === 0) p.stock = false;
-      dispatch(updateProductQuantity({ ...p }));
-      dispatch(deleteCart({ id: item.id }));
+      let product = ProductStateData.find((x) => x._id === item.product?._id);
+      product.stockQuantity = product.stockQuantity- item.qty;
+      product.stock = product.stockQuantity===0?false:true
+      // if (Product.quantity === 0) Product.stock = false;
+      let formData = new FormData()
+      formData.append("_id" , product._id)
+      formData.append("stockQuantity" , product.stockQuantity)
+      formData.append("stock" , product.stock)
+      dispatch(updateProduct(formData));
+      dispatch(deleteCart({ _id: item._id }));
     }
     navigate("/confirmation");
   }
@@ -51,9 +59,7 @@ export default function Checkout() {
     (() => {
       dispatch(getCart());
       if (CartStateData.length) {
-        let data = CartStateData.filter(
-          (x) => x.user === localStorage.getItem("userid")
-        );
+        let data = CartStateData
         setCart(data);
         let sum = 0;
         for (let item of data) {
@@ -62,7 +68,7 @@ export default function Checkout() {
         setSubtotal(sum);
         if (sum > 0 && sum < 1000) {
           setShipping(150);
-          setSubtotal(sum + 150);
+          setTotal(sum + 150);
         } else {
           setTotal(sum);
           setShipping(0);
@@ -76,22 +82,28 @@ export default function Checkout() {
     (() => {
       dispatch(getProduct());
     })();
-  });
+  }, ProductStateData.length);
 
-  useEffect(() => {
-    (async () => {
-      let response = await fetch("/user", {
-        method: "get",
-        headers: {
-          "content-type": "application/json",
-        },
-      });
-      response = await response.json();
-      let item = response.find((x) => x.id === localStorage.getItem("userid"));
-      if (item) setUser(item);
-      else navigate("/login");
-    })();
-  }, []);
+  useEffect(()=>{
+          (async()=>{
+  let response = await fetch("/api/user/"+localStorage.getItem("userid"),{
+    method:"GET",
+    headers:{
+        "content-type":"application/json",
+        "authorization":localStorage.getItem("token")
+    }
+
+})
+response=await response.json()
+// console.log(response.data);
+
+if(response.result === "Done")
+    setUser(response.data)
+else
+navigate("/login")
+        })()
+    },[])
+  
   return (
     <>
       <div className="container-fluid">
@@ -116,19 +128,20 @@ export default function Checkout() {
                     </tr>
                   </thead>
                   <tbody>
-                    {cart.map((item, index) => {
+                    {
+                    cart.map((item, index) => {
                       return (
                         <tr key={index}>
                           <td>
                             <a
-                              href={item.pic}
+                              href={`/${item.product?.pic}`}
                               target="_blank"
                               rel="noreferrer"
                             ></a>
-                            <img src={item.pic} height={50} width={50} alt="" />
+                            <img src={`/${item.product?.pic}`} height={50} width={50} alt="" />
                           </td>
-                          <td>{item.name}</td>
-                          <td>&#8377;{item.price}</td>
+                          <td>{item.product?.name}</td>
+                          <td>&#8377;{item.product?.finalPrice}</td>
                           <td>{item.qty}</td>
                           <td>&#8377;{item.total}</td>
                         </tr>
