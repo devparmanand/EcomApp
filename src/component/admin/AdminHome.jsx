@@ -51,7 +51,7 @@ navigate("/login")
                 <div className="col-md-6">
                     <h5 className="bg-primary text-light text-center">Admin Profile</h5>
                     <table className="table">
-                        <tbody>
+                        {/* <tbody>
                             <tr>
                                 <th>Name</th>
                                 <td>{user.name}</td>
@@ -72,7 +72,7 @@ navigate("/login")
                                 
                                 <td colSpan={2}><Link to="/update-profile" className="btn btn-primary w-100">Update Profile</Link></td>
                             </tr>
-                        </tbody>
+                        </tbody> */}
                     </table>
                 </div>
             </div>

@@ -5,16 +5,18 @@ import { getCheckout } from "../../../Store/ActionCreators/CheckoutActionCreator
 import { deleteCheckout } from "../../../Store/ActionCreators/CheckoutActionCreators ";
 import { updateCheckout } from "../../../Store/ActionCreators/CheckoutActionCreators ";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 export default function AdminCheckout() {
   let [data, setData] = useState([])
+  let {_id} = useParams()
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
+    { field: "_id", headerName: "ID", width: 250 },
     { field: "orderStatus", headerName: "Order Status", width: 150 },
     { field: "paymentMode", headerName: "Payment Mode", width: 150 },
     { field: "paymentStatus", headerName: "Payment Status", width: 150 },
-    { field: "subtotal", headerName: "Price", width: 100 },
-    // { field: "shipping", headerName: "Shipping", width: 100 },
+    { field: "subtotal", headerName: "finalPrice", width: 100 },
+    { field: "shipping", headerName: "Shipping", width: 100 },
     { field: "total", headerName: "Total", width: 100 },
     
   
@@ -22,8 +24,8 @@ export default function AdminCheckout() {
       field: "delete",
       headerName: "Delete",
       width: 100,
-      renderCell: (row) => (
-        <button className="btn btn-danger" onClick={() => deleteData(row.id)}>
+      renderCell: ({row}) => (
+        <button className="btn btn-danger" onClick={() => deleteData(row._id)}>
           <i className="fa fa-trash"></i>
         </button>
       ),
@@ -33,16 +35,16 @@ export default function AdminCheckout() {
     let dispatch = useDispatch();
 
 
-  function deleteData(id) {
+  function deleteData(_id) {
     if (window.confirm("Are You Sure to Delete that Item: ")) {
-      dispatch(deleteCheckout({ id:id }));
+      dispatch(deleteCheckout({ _id:_id }));
       getAPIData();
     }
   }
 
-  function updateData(id,status) {
+  function updateData(_id,status) {
     if (window.confirm("Are You Sure to Change Status: ")) {
-      dispatch(updateCheckout({ id: id, active:!status }));
+      dispatch(updateCheckout({ _id: _id, active:!status }));
       getAPIData();
     }
   }
@@ -76,6 +78,7 @@ export default function AdminCheckout() {
                 <DataGrid
                   rows={data}
                   columns={columns}
+                  getRowId={(row)=>row._id}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 5 },

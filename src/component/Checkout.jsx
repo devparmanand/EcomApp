@@ -21,7 +21,7 @@ export default function Checkout() {
   let [shipping, setShipping] = useState(0);
   let [total, setTotal] = useState(0);
   let navigate = useNavigate();
-  let [mode, setMode] = "COD";
+  let [mode, setMode] = useState("COD")
   let CartStateData = useSelector((state) => state.CartStateData);
   let ProductStateData = useSelector((state) => state.ProductStateData);
 
@@ -29,8 +29,8 @@ export default function Checkout() {
     let item = {
       user: localStorage.getItem("userid"),
       orderStatus: "Order is Placed",
-      // paymentMode:mode,
-      paymentMode: "COD",
+      paymentMode:mode,
+      // paymentMode: "COD",
       paymentStatus: "Pending",
       subtotal: subtotal,
       shipping: shipping,
@@ -39,7 +39,7 @@ export default function Checkout() {
       products: cart,
     };
     dispatch(createCheckout(item));
-    console.log(item);
+    // console.log(item);
     
     for (let item of cart) {
       let product = ProductStateData.find((x) => x._id === item.product?._id);
@@ -53,6 +53,10 @@ export default function Checkout() {
       dispatch(updateProduct(formData));
       dispatch(deleteCart({ _id: item._id }));
     }
+if(mode!== "COD"){
+  navigate("/payment")
+}
+else
     navigate("/confirmation");
   }
   useEffect(() => {
@@ -169,6 +173,7 @@ navigate("/login")
                         <select
                           name="mode"
                           onChange={(e) => setMode(e.target.value)}
+                          value={mode}
                           className="form-select"
                         >
                           <option value="COD">COD</option>
