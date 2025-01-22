@@ -28,8 +28,8 @@ export default function AdminCheckout() {
         <button className="btn btn-danger" onClick={() => deleteData(row._id)}>
           <i className="fa fa-trash"></i>
         </button>
-      ),
-    },
+      )
+    }
   ]
   let CheckoutStateData=useSelector((state)=>state.CheckoutStateData)
     let dispatch = useDispatch();
@@ -51,14 +51,20 @@ export default function AdminCheckout() {
 
  function getAPIData() {
  dispatch(getCheckout())
-    if (CheckoutStateData.length)
+    if (CheckoutStateData.length){
       setData(CheckoutStateData);
+    console.log(CheckoutStateData);
+    }
+      
+    
     else
      setData([]);
   }
 
   useEffect(() => {
+   (()=>{
     getAPIData();
+   })()
   }, [CheckoutStateData.length]);
 
    return(

@@ -72,6 +72,8 @@ export default function AdminProduct() {
   //data get karne ke liye
 
    function deleteData(_id) {
+    console.log(_id);
+    
     if (window.confirm("Are You Sure to Delete that Item: ")) {
       // let response=await fetch("http://localhost:8000/product/"+id,{
       //   method:"DELETE",
@@ -105,7 +107,7 @@ export default function AdminProduct() {
     if (ProductStateData.length){
       setData(ProductStateData);
       let item = ProductStateData.map((x)=>x.maincategory.name)
-      console.log(item[0]);
+      // console.log(item[0]);
       setMaincategor0y(item)
       setMaincategor0y(data)
            

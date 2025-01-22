@@ -11,7 +11,9 @@ import {
   getProduct,
 
 } from "../Store/ActionCreators/ProductActionCreators";
-import { updateProduct } from "../Store/ActionCreators/ProductActionCreators";
+// import { updateProduct } from "../Store/ActionCreators/ProductActionCreators";
+import { updateProductQuantity } from "../Store/ActionCreators/ProductActionCreators";
+import { updateCart } from "../Store/ActionCreators/CartActionCreators";
 export default function Checkout() {
   let [user, setUser] = useState({});
 
@@ -46,11 +48,17 @@ export default function Checkout() {
       product.stockQuantity = product.stockQuantity- item.qty;
       product.stock = product.stockQuantity===0?false:true
       // if (Product.quantity === 0) Product.stock = false;
-      let formData = new FormData()
-      formData.append("_id" , product._id)
-      formData.append("stockQuantity" , product.stockQuantity)
-      formData.append("stock" , product.stock)
-      dispatch(updateProduct(formData));
+      // let formData = new FormData()
+      // formData.append("_id" , product._id)
+      // formData.append("stockQuantity" , product.stockQuantity)
+      // formData.append("stock" , product.stock)
+      let productItem = {
+        _id : product._id,
+        stockQuantity : product.stockQuantity,
+        stock : product.stock
+      }
+      // dispatch(updateProduct(formData));
+      dispatch(updateProductQuantity(productItem))
       dispatch(deleteCart({ _id: item._id }));
     }
 if(mode!== "COD"){
@@ -86,7 +94,7 @@ else
     (() => {
       dispatch(getProduct());
     })();
-  }, ProductStateData.length);
+  }, [ProductStateData.length]);
 
   useEffect(()=>{
           (async()=>{
@@ -108,6 +116,68 @@ navigate("/login")
         })()
     },[])
   
+    function calculate(data) {
+      let sum = 0;
+          for (let item of data) {
+            sum = sum + item.total;
+          }
+          setSubtotal(sum);
+          if (sum > 0 && sum < 1000) {
+            setShipping(150);
+            setTotal(sum + 150);
+          } else {
+            setTotal(sum);
+            setShipping(0);
+          }
+      
+    }
+     function deleteData(_id) {
+        if (window.confirm("Are You Sure to Remove Item from Cart: ")) {
+          dispatch(deleteCart({ _id: _id }));
+          getAPIData();
+        }
+      }
+    
+      function updateData(_id, option) {
+        let item = cart.find((x) => x._id === _id)
+        let index = cart.findIndex((x) => x._id === _id)
+    // console.log(item);
+    // return
+        if (item){
+          if(option === "DEC" && item.qty===1)
+            return
+        else if (option === "DEC") {
+          item.qty = item.qty - 1;
+          item.total = item.total - item.product?.finalPrice;
+        }
+         else {
+          if (item.qty < item.product?.stockQuantity) {
+            item.qty = item.qty + 1;
+            item.total = item.total + item.product?.finalPrice;
+          }
+        }
+        dispatch(updateCart({ ...item }));
+        cart[index].qty=item.qty
+        cart[index].total=item.total
+     calculate(cart)
+         
+        }
+       
+      }
+      function getAPIData() {
+        dispatch(getCart());
+        if (CartStateData.length) {
+          let data = CartStateData;
+          setCart(data);
+        calculate(data)
+        } else 
+        setCart([]);
+      }
+      useEffect(() => {
+        (() => {
+          getAPIData();
+        })();
+      }, [CartStateData.length]);
   return (
     <>
       <div className="container-fluid">

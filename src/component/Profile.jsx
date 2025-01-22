@@ -65,6 +65,8 @@ useEffect(()=>{
     // console.log(CheckoutStateData);
     
     }
+    else
+    setOrders([])
    })()
 },[CheckoutStateData.length])
   return (
@@ -100,8 +102,8 @@ useEffect(()=>{
                         <th>Color</th>
                         <th>Size</th>
                         <th>Price</th>
-                        <th></th>
-                        <th></th>
+                        <th>Add to Cart</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -196,14 +198,14 @@ useEffect(()=>{
                 </thead>
                 <tbody>
                {
-                item.products.map((p,ind)=>{
+                item.products?.map((p,ind)=>{
                     return  <tr   key={ind}>
                     <td>
-                        <a href={`/${p.product?.pic}`} target='_blank' rel='noreferrer'>
-                        <img src={`/${p.product?.pic}`} height={50} width={50} alt="" />
+                        <a href={`/${p.product?.pic[0]}`} target='_blank' rel='noreferrer'>
+                        <img src={`/${p.product?.pic[0]}`} height={50} width={50} alt="" />
                         
                         </a>
-                    </td>
+                    </td> 
                     <td>{p.product?.name}</td>
                     <td>{p.product?.brand.name}</td>
                     <td>{p.product?.color}</td>

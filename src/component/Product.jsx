@@ -52,11 +52,11 @@ dispatch(getProduct())
 if(ProductStateData.length){
   let item= ProductStateData.find((x)=>x._id===_id)
   setProduct(item)
-  setRelatedProducts(ProductStateData.filter((x)=>x.maincategory._id === item.maincategory._id))
+  setRelatedProducts(ProductStateData.filter((x)=>x.maincategory?._id === item.maincategory?._id))
 
 }
     })()
-  },[ProductStateData.length])
+  },[ProductStateData.length] , window.location.href)
 
   useEffect(()=>{
 dispatch(getCart())
@@ -64,7 +64,7 @@ if(CartStateData.length){
 setCart(CartStateData)
 
 }
-  } , CartStateData.length)
+  } , [CartStateData.length])
 
 
   useEffect(()=>{
@@ -75,7 +75,7 @@ if(WishlistStateData.length){
 }
 
     })()
-  },WishlistStateData.length)
+  },[WishlistStateData.length])
 
 
   
@@ -105,7 +105,7 @@ if(WishlistStateData.length){
   <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
     <span className="carousel-control-next-icon" aria-hidden="true"></span>
     <span className="visually-hidden">Next</span>
-  </button>
+    </button>
         </div>
         </div>
         <div className="col-md-6">

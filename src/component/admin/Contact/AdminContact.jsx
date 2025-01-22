@@ -4,10 +4,12 @@ import Sidebar from "../Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteContact, getContact } from "../../../Store/ActionCreators/ContactusActionCreators";
 import { updateContact } from "../../../Store/ActionCreators/ContactusActionCreators";
+import { useParams } from "react-router-dom";
 export default function AdminContact() {
   let [data, setData] = useState([])
+  let {_id} =useParams()
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
+    { field: "_id", headerName: "ID", width: 100 },
     { field: "email", headerName: "Email", width: 300 },
     {
       field: "active",
@@ -15,7 +17,7 @@ export default function AdminContact() {
       width: 100,
       renderCell: ({row}) =>
         <p title="Click to Change Status" 
-        onClick={()=>updateData(row.id,row.active)}
+        onClick={()=>updateData(row._id,row.active)}
          className={row.active ? "text-success" : "text-danger"}>
           {row.active ? "Yes" : "No"}
         </p>
@@ -26,8 +28,8 @@ export default function AdminContact() {
       field: "delete",
       headerName: "Delete",
       width: 100,
-      renderCell: (row) => (
-        <button className="btn btn-danger" onClick={() => deleteData(row.id)}>
+      renderCell: ({row}) => (
+        <button className="btn btn-danger" onClick={() => deleteData(row._id)}>
           <i className="fa fa-trash"></i>
         </button>
       ),
@@ -37,16 +39,16 @@ export default function AdminContact() {
     let dispatch = useDispatch();
 
 
-  function deleteData(id) {
+  function deleteData(_id) {
     if (window.confirm("Are You Sure to Delete that Item: ")) {
-      dispatch(deleteContact({ id:id }));
+      dispatch(deleteContact({ _id:_id }));
       getAPIData();
     }
   }
 
-  function updateData(id,status) {
+  function updateData(_id,status) {
     if (window.confirm("Are You Sure to Change Status: ")) {
-      dispatch(updateContact({ id: id, active:!status }));
+      dispatch(updateContact({ _id: _id, active:!status }));
       getAPIData();
     }
   }
@@ -80,6 +82,7 @@ export default function AdminContact() {
                 <DataGrid
                   rows={data}
                   columns={columns}
+                  getRowId={  (row)=>row._id}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 5 },

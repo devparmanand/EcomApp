@@ -7,7 +7,8 @@ export default function Products(props) {
     
     <div className="container-xxl py-5">
       <div className="container">
-        <div className=" align-items-end mb-5">
+     <div className="row">
+     <div className=" align-items-end mb-5">
           <div className=" wow fadeInUp" data-wow-delay="0.1s">
             <div className="border-start border-5 border-primary ps-4">
 
@@ -22,10 +23,12 @@ export default function Products(props) {
            </div>
           </div>
         </div>
-        <div className="row g-4 justify-content-center">
+
+        
+        <div className="row">
          {
         props.data && props.data.map((item,index)=>{
-          return <div key={index} className="col-lg-3 col-md-4 col-sm-2 wow fadeInUp" data-wow-delay="0.1s">
+          return <div key={index} className="col-12 col-md-4 col-lg-3  col-sm-2 wow fadeInUp" data-wow-delay="0.1s">
             <div className="service-item bg-light overflow-hidden h-100">
               <img className="img-fluid" src={`/${item.pic[0]}`} style={{height:250,width:"100%"}} alt="" />
               <div className="service-text position-relative text-center h-100 p-4">
@@ -48,6 +51,7 @@ export default function Products(props) {
         })
        }
        </div>
+     </div>
 
       </div>
     </div>
