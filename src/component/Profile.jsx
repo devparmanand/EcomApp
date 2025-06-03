@@ -17,7 +17,7 @@ export default function Profile() {
     let CheckoutStateData=useSelector((state)=>state.CheckoutStateData)
     useEffect(()=>{
         (async()=>{
-let response = await fetch("/api/user/"+localStorage.getItem("userid"),{
+let response = await fetch("https://ecom-backend-2-eco5.onrender.com/api/user/"+localStorage.getItem("userid"),{
     method:"GET",
     headers:{
         "content-type":"application/json",
