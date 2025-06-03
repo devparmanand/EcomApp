@@ -2,7 +2,7 @@
 //API Ka Path sahi se de varna Error aati hai
 export async function createRecord(collection, payload) {
   
-  let response = await fetch(`/api/${collection}`,
+  let response = await fetch(`https://ecom-backend-2-eco5.onrender.com/api/${collection}`,
     {
       method: "POST",
       headers: {
@@ -16,7 +16,7 @@ export async function createRecord(collection, payload) {
 }
 
 export async function createRecordFormData(collection, payload) {
-  let response = await fetch(`/api/${collection}`,
+  let response = await fetch(`https://ecom-backend-2-eco5.onrender.com/api/${collection}`,
     {
       method: "POST",
       headers: {
@@ -30,7 +30,7 @@ export async function createRecordFormData(collection, payload) {
 }
 
 export async function getRecord(collection) {
-  let url = collection==="cart" || collection==="wishlist" ? `/api/${collection}/${localStorage.getItem("userid")}`:`/api/${collection}`
+  let url = collection==="cart" || collection==="wishlist" ? `https://ecom-backend-2-eco5.onrender.com/api/${collection}/${localStorage.getItem("userid")}`:`https://ecom-backend-2-eco5.onrender.com/api/${collection}`
   let response = await fetch(url,{
       method: "GET",
       headers: {
@@ -44,7 +44,7 @@ export async function getRecord(collection) {
 }
 
 export async function updateRecord(collection, payload) {
-  let response = await fetch(`/api/${collection}/${payload._id}`,
+  let response = await fetch(`https://ecom-backend-2-eco5.onrender.com/api/${collection}/${payload._id}`,
     {
       method: "PUT",
       headers: {
@@ -59,7 +59,7 @@ export async function updateRecord(collection, payload) {
 }
 
 export async function updateRecordFormData(collection, payload) {
-  let response = await fetch(`/api/${collection}/${payload.get("_id")}`,
+  let response = await fetch(`https://ecom-backend-2-eco5.onrender.com/api/${collection}/${payload.get("_id")}`,
     {
       method: "PUT",
       headers: {
@@ -73,7 +73,7 @@ export async function updateRecordFormData(collection, payload) {
 }
 
 export async function deleteRecord(collection, payload) {
-  let response = await fetch(`/api/${collection}/${payload._id}`,
+  let response = await fetch(`https://ecom-backend-2-eco5.onrender.com/api/${collection}/${payload._id}`,
     {
       method: "DELETE",
       headers: {

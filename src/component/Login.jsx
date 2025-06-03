@@ -39,7 +39,7 @@ export default function Login() {
             e.preventDefault()
           let error=Object.values(errorMessage).find((x)=>x!=="")
           if(!error){
-              let resposne = await fetch("/api/user/login",{
+              let resposne = await fetch("https://ecom-backend-2-eco5.onrender.com/api/user/login",{
                 method:"POST",
                 headers:{
                     "content-type":"application/json"

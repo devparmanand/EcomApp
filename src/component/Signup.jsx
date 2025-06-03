@@ -55,7 +55,7 @@ export default function Signup() {
           role: "Buyer",
         }
 
-        let   resposne = await fetch("/api/user", {
+        let   resposne = await fetch("https://ecom-backend-2-eco5.onrender.com/api/user", {
           method: "POST",
           headers: {
             "content-type": "application/json",
