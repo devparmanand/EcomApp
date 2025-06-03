@@ -59,7 +59,7 @@ export default function UpdateProfile() {
       formData.append("pic" , data.pic)
       
       
-      let resposne = await fetch("/api/user/"  + data._id, {
+      let resposne = await fetch("https://ecom-backend-2-eco5.onrender.com/api/user/"  + data._id, {
         method: "PUT",
         headers: {
           "authorization":localStorage.getItem("token")
@@ -84,7 +84,7 @@ export default function UpdateProfile() {
 
   useEffect(() => {
     (async () => {
-      let response = await fetch("/api/user/"+localStorage.getItem("userid"), {
+      let response = await fetch("https://ecom-backend-2-eco5.onrender.com/api/user/"+localStorage.getItem("userid"), {
         method: "GET",
         headers: {
           "content-type": "application/json",
