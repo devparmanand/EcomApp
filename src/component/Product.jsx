@@ -87,12 +87,12 @@ if(WishlistStateData.length){
         <div id="carouselExampleControls" className="carousel slide" data-bs-ride="carousel">
   <div className="carousel-inner">
     <div className="carousel-item active">
-      <img src={product.pic && `/${product.pic[0]}`} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
+      <img src={product.pic && `https://ecom-backend-2-eco5.onrender.com/${product.pic[0]}`} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
     </div>
     {
       product.pic && product.pic.slice(1).map((item,index)=>{
        return <div className="carousel-item" key={index}>
-         <img src={`/${item}`} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
+         <img src={`https://ecom-backend-2-eco5.onrender.com/${item}`} style={{height:500,width:"100%"}} className="d-block w-100" alt="..."/>
        </div>
       })
     }

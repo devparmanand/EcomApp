@@ -64,7 +64,7 @@ export default function Testimonial() {
                   <img
                   className="mb-4"
                   style={{height:100,width:100}}
-                  src={item.pic}
+                  src={`https://ecom-backend-2-eco5.onrender.com/${item.pic}`}
                   alt=""
                 />
                 <p className="fs-5">

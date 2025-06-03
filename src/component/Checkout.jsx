@@ -208,11 +208,11 @@ navigate("/login")
                         <tr key={index}>
                           <td>
                             <a
-                              href={`/${item.product?.pic}`}
+                              href={`https://ecom-backend-2-eco5.onrender.com/${item.product?.pic}`}
                               target="_blank"
                               rel="noreferrer"
                             ></a>
-                            <img src={`/${item.product?.pic}`} height={50} width={50} alt="" />
+                            <img src={`https://ecom-backend-2-eco5.onrender.com/${item.product?.pic}`} height={50} width={50} alt="" />
                           </td>
                           <td>{item.product?.name}</td>
                           <td>&#8377;{item.product?.finalPrice}</td>

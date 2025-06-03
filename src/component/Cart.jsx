@@ -107,12 +107,12 @@ function calculate(data) {
                       <tr key={index}>
                         <td>
                           <a
-                            href={`/${item.product?.pic}`}
+                            href={`https://ecom-backend-2-eco5.onrender.com/${item.product?.pic}`}
                             target="_blank"
                             rel="noreferrer"
                           ></a>
                           <img
-                            src={`/${item.product?.pic}`}
+                            src={`https://ecom-backend-2-eco5.onrender.com/${item.product?.pic}`}
                             height={50}
                             width={50}
                             alt=""

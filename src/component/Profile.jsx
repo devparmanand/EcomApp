@@ -77,7 +77,7 @@ useEffect(()=>{
             <div className="col-md-6">
                 {
                     user.pic?
-                    <img src={user.pic} height={430} width="100%" alt="User Image"/>:
+                    <img src={`https://ecom-backend-2-eco5.onrender.com/${user.pic}`} height={430} width="100%" alt="User Image"/>:
                     <img src="/img/noimage.png" height={430} width="100%"  alt="User Image"/>
                 }
             </div>
@@ -111,8 +111,8 @@ useEffect(()=>{
                 wishlist.map((item,index)=>{
                     return  <tr key={index}>
                     <td>
-                        <a href={`/${item.product?.pic[0]}`} target='_blank' rel='noreferrer'>
-                        <img src={`/${item.product?.pic[0]}`} height={50} width={50} alt="" />
+                        <a href={`https://ecom-backend-2-eco5.onrender.com/${item.product?.pic[0]}`} target='_blank' rel='noreferrer'>
+                        <img src={`https://ecom-backend-2-eco5.onrender.com/${item.product?.pic[0]}`} height={50} width={50} alt="" />
                         
                         </a>
                     </td>
@@ -201,8 +201,8 @@ useEffect(()=>{
                 item.products?.map((p,ind)=>{
                     return  <tr   key={ind}>
                     <td>
-                        <a href={`/${p.product?.pic[0]}`} target='_blank' rel='noreferrer'>
-                        <img src={`/${p.product?.pic[0]}`} height={50} width={50} alt="" />
+                        <a href={`https://ecom-backend-2-eco5.onrender.com/${p.product?.pic[0]}`} target='_blank' rel='noreferrer'>
+                        <img src={`https://ecom-backend-2-eco5.onrender.com/${p.product?.pic[0]}`} height={50} width={50} alt="" />
                         
                         </a>
                     </td> 
