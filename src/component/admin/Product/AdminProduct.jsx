@@ -26,7 +26,7 @@ export default function AdminProduct() {
   //   { field: "finalPrice", headerName: "FinalPrice", width: 200,renderCell:({row})=><span>&#8377;{row.finalPrice}</span> },
     
   //     { field: "pic", headerName: "Pic", width: 300 ,renderCell:({row})=>row.pic?.map((item,index)=>{
-  //       return  <a key={index} href={`http://localhost:8000/${item}`} target='_blank' rel="noreferrer" >
+  //       return  <a key={index} href={`https://ecom-backend-2-eco5.onrender.com/${item}`} target='_blank' rel="noreferrer" >
   //       <img src={`/${item}`} height={50} width={50} className="rounded" alt="" />
   //     </a>
   //      })
@@ -75,7 +75,7 @@ export default function AdminProduct() {
     console.log(_id);
     
     if (window.confirm("Are You Sure to Delete that Item: ")) {
-      // let response=await fetch("http://localhost:8000/product/"+id,{
+      // let response=await fetch("https://ecom-backend-2-eco5.onrender.com/product/"+id,{
       //   method:"DELETE",
       //   headers:{
       //     "content-type":"application/json"
@@ -95,7 +95,7 @@ export default function AdminProduct() {
   }
 
  function getAPIData() {
-    // let response= await fetch("http://localhost:8000/Product",{
+    // let response= await fetch("https://ecom-backend-2-eco5.onrender.com/Product",{
     //   method:"GET",
     //   headers:{
     //     "content-type":"application/json"
@@ -208,12 +208,12 @@ export default function AdminProduct() {
                           <div style={{width:300}}>
                           {
                              item.pic.map((img,index)=>{
-                              return <Link key={index} to={`http://localhost:8000/${img}`} target="blank" rel="noreferrer">
+                              return <Link key={index} to={`https://ecom-backend-2-eco5.onrender.com/${img}`} target="blank" rel="noreferrer">
                                 <img src={`/${img}`} height={50} width={50} alt="Product image" />
                               </Link>
                              })
 
-                          //    <a href={`http://localhost:8000/${row.pic}`} target='_blank' rel="noreferrer">
+                          //    <a href={`https://ecom-backend-2-eco5.onrender.com/${row.pic}`} target='_blank' rel="noreferrer">
                           //    <img src={`/${row.pic
                           //    }`} height={50} width={50} className="rounded" alt="" />
                           //  </a>
