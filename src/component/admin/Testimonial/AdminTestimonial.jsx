@@ -12,8 +12,8 @@ export default function AdminTestimonial() {
     { field: "_id", headerName: "ID", width: 250 },
     { field: "name", headerName: "Name", width: 200 },
  { field: "pic", headerName: "Pic", width: 200 ,
- renderCell:({row})=> <a href={`/${row.pic}`} target='_blank' rel="noreferrer" >
-      <img src={`/${row.pic}`} height={50} width={50} className="rounded" alt="" />
+ renderCell:({row})=> <a href={`https://ecom-backend-2-eco5.onrender.com/${row.pic}`} target='_blank' rel="noreferrer" >
+      <img src={`https://ecom-backend-2-eco5.onrender.com/${row.pic}`} height={50} width={50} className="rounded" alt="" />
     </a>},
  
  { field: "message", headerName: "Message", width: 300 },
